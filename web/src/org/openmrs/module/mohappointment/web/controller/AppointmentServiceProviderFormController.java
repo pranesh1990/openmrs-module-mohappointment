@@ -39,8 +39,10 @@ public class AppointmentServiceProviderFormController extends
 				request.getSession().setAttribute(
 						WebConstants.OPENMRS_MSG_ATTR, "Form Saved");
 			else
-				request.getSession().setAttribute(
-						WebConstants.OPENMRS_ERROR_ATTR, "Form Not Saved");
+				request.getSession()
+						.setAttribute(WebConstants.OPENMRS_ERROR_ATTR,
+								"Form Not Saved (Maybe the Provider is already" +
+								" associated with this service!)");
 		}
 
 		return mav;
