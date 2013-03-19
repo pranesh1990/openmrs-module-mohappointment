@@ -54,9 +54,9 @@ public class AppointmentServiceProviderFormController extends
 				.compareTo("") != 0) ? Context.getDateFormat().parse(
 				request.getParameter("startDate")) : null;
 		Person provider = (request.getParameter("provider").trim()
-				.compareTo("") != 0) ? Context.getUserService().getUser(
-				Integer.valueOf(request.getParameter("provider"))).getPerson()
-				: null;
+				.compareTo("") != 0) ? Context.getUserService()
+				.getUser(Integer.valueOf(request.getParameter("provider")))
+				.getPerson() : null;
 		Services service = (request.getParameter("service").trim()
 				.compareTo("") != 0) ? ias.getServiceById(Integer
 				.valueOf(request.getParameter("service"))) : null;
@@ -72,9 +72,35 @@ public class AppointmentServiceProviderFormController extends
 			sp.setCreatedDate(new Date());
 			sp.setCreator(Context.getAuthenticatedUser());
 
-			ias.saveServiceProviders(sp);
+			if (!providerIsAlreadyAssignedThisService(provider, service))
+				ias.saveServiceProviders(sp);
+			else
+				return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Checks whether the entered Provider and Service are not already
+	 * associated in the ServiceProviders list
+	 * 
+	 * @param provider
+	 *            the provider to be matched
+	 * @param service
+	 *            the service to be matched
+	 * @return true if they are already associated
+	 */
+	private boolean providerIsAlreadyAssignedThisService(Person provider,
+			Services service) {
+		IAppointmentService ias = Context.getService(IAppointmentService.class);
+
+		for (ServiceProviders sp : ias.getServiceProviders()) {
+			if (sp.getProvider().equals(provider)
+					&& sp.getService().equals(service) && !sp.isVoided())
+				return true;
+		}
+
+		return false;
 	}
 
 }
