@@ -3,6 +3,7 @@
  */
 package org.openmrs.module.mohappointment.utils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -129,8 +130,8 @@ public class AppointmentUtil {
 	public static Services getServiceByConcept(Concept concept) {
 
 		IAppointmentService ias = getAppointmentService();
-		
-		if(ias != null)
+
+		if (ias != null)
 			for (Services service : ias.getServices()) {
 				if (service.getConcept().getConceptId().intValue() == concept
 						.getConceptId().intValue())
@@ -152,25 +153,26 @@ public class AppointmentUtil {
 	public static boolean cancelAppointment(HttpServletRequest request) {
 
 		Integer appointmentId = 0;
-
 		IAppointmentService service = getAppointmentService();
 
 		if (request.getParameter("appointmentId") != null)
 			if (!request.getParameter("appointmentId").equalsIgnoreCase("")) {
+
 				appointmentId = Integer.valueOf(request
 						.getParameter("appointmentId"));
 				Appointment appointment = service
 						.getAppointmentById(appointmentId);
 
-				if (request.getParameter("cancel") != null) {
+				if (request.getParameter("cancel") != null)
+					if (request.getParameter("cancel").equals("true")) {
 
-					appointment.setVoided(true);
-					appointment.setAppointmentState(new AppointmentState(1,
-							"NULL"));
-					service.saveAppointment(appointment);
+						appointment.setVoided(true);
+						appointment.setAppointmentState(new AppointmentState(1,
+								"NULL"));
+						service.saveAppointment(appointment);
 
-					return true;
-				}
+						return true;
+					}
 			}
 		return false;
 	}
@@ -197,15 +199,20 @@ public class AppointmentUtil {
 				Appointment appointment = service
 						.getAppointmentById(appointmentId);
 
-				if (request.getParameter("attended") != null) {
+				if (request.getParameter("attended") != null)
+					if (request.getParameter("attended").equals("true")) {
 
-					appointment.setAttended(true);
-					appointment.setAppointmentState(new AppointmentState(9,
-							"ATTENDED"));
-					service.saveAppointment(appointment);
+						appointment.setAttended(true);
+						appointment.setAppointmentState(new AppointmentState(9,
+								"ATTENDED"));
+						service.saveAppointment(appointment);
 
-					return true;
-				}
+						System.out
+								.println("_________CANCELED APPOINTMENT__________\n"
+										+ appointment.toString());
+
+						return true;
+					}
 			}
 		return false;
 	}
@@ -539,6 +546,42 @@ public class AppointmentUtil {
 				appointments.add(service.getAppointmentById(id));
 
 		return appointments;
+	}
+
+	/**
+	 * Gets the specified Stated (Appointment States) Appointments for the given
+	 * Patient with the
+	 * 
+	 * @param patient
+	 *            the patient to be matched in order to get his/her appointments
+	 * @param state
+	 *            the Appointment State to be matched while returning
+	 *            Appointments
+	 * @param service
+	 *            the patient to be matched in order to get his/her appointments
+	 * @param appointmentDate
+	 *            the Appointment State to be matched while returning
+	 *            Appointments
+	 * @return the Appointments list matched
+	 * @throws ParseException
+	 */
+	public static Boolean isPatientAlreadyWaitingThere(Patient patient,
+			AppointmentState state, Services service, Date appointmentDate)
+			throws ParseException {
+
+		IAppointmentService appointmentService = getAppointmentService();
+
+		if (appointmentService.getAllWaitingAppointmentsByPatient(patient,
+				state, appointmentDate) != null)
+			for (Appointment appointment : appointmentService
+					.getAllWaitingAppointmentsByPatient(patient, state,
+							appointmentDate)) {
+
+				if (appointment.getService().equals(service))
+					return true;
+			}
+
+		return false;
 	}
 
 }

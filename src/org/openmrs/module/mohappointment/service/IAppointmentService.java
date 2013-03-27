@@ -3,10 +3,13 @@
  */
 package org.openmrs.module.mohappointment.service;
 
+import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.module.mohappointment.model.Appointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
@@ -206,14 +209,33 @@ public interface IAppointmentService {
 	 * @returnall the matching providerIds <code>personId</code> in that service
 	 */
 	public Collection<Services> getServicesByProvider(Person provider);
-	
+
 	/**
-	 * Gets the matching ServiceProviders by entering the <code>serviceProviderId</code>
+	 * Gets the matching ServiceProviders by entering the
+	 * <code>serviceProviderId</code>
 	 * 
 	 * @param serviceProviderId
-	 *            the serviceProviderId to be matched in order to get the serviceProviders
+	 *            the serviceProviderId to be matched in order to get the
+	 *            serviceProviders
 	 * 
 	 * @return the serviceProviders matched
 	 */
 	public ServiceProviders getServiceProviderById(int serviceProviderId);
+
+	/**
+	 * Gets the specified Stated (Appointment States) Appointments for the given
+	 * Patient with the
+	 * 
+	 * @param patient
+	 *            the patient to be matched in order to get his/her appointments
+	 * @param state
+	 *            the Appointment State to be matched while returning
+	 *            Appointments
+	 * @param appointmentDate
+	 *            the appointment date to be matched
+	 * @return the Appointments list matched
+	 * @throws ParseException 
+	 */
+	public Collection<Appointment> getAllWaitingAppointmentsByPatient(
+			Patient patient, AppointmentState state, Date appointmentDate) throws ParseException;
 }

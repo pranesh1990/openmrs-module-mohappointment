@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.mohappointment.db.hibernate;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +29,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
+import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.db.AppointmentDAO;
@@ -313,16 +315,13 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	public AppointmentState getAppointmentStatesByName(String name) {
 		Session session = getSessionFactory().getCurrentSession();
 
-		Object[] appState = (Object[]) session
-				.createSQLQuery(
-						"SELECT appointment_state_id, description FROM moh_appointment_state WHERE description = '"
-								+ name + "';").uniqueResult();
+		Object[] appState = (Object[]) session.createSQLQuery(
+				"SELECT appointment_state_id, description "
+						+ "FROM moh_appointment_state WHERE description = '"
+						+ name + "';").uniqueResult();
 
 		AppointmentState appointmentState = new AppointmentState(
 				(Integer) appState[0], (String) appState[1]);
-
-		System.out.println(">>>>>>>>>>> Matched state: "
-				+ appointmentState.toString());
 
 		return appointmentState;
 	}
@@ -431,17 +430,18 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	@Override
 	public Services getServiceById(Integer serviceId) {
 		Session session = sessionFactory.getCurrentSession();
-	
+
 		Services services = (Services) session.load(Services.class, serviceId);
 
 		return services;
 	}
-	
+
 	@Override
 	public ServiceProviders getServiceProviderById(int serviceProviderId) {
 		Session session = sessionFactory.getCurrentSession();
 
-		ServiceProviders serviceProvider = (ServiceProviders) session.load(ServiceProviders.class, serviceProviderId);
+		ServiceProviders serviceProvider = (ServiceProviders) session.load(
+				ServiceProviders.class, serviceProviderId);
 
 		return serviceProvider;
 	}
@@ -570,5 +570,92 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 				.list();
 
 		return appointmentIds;
+	}
+
+	/**
+	 * @throws ParseException
+	 * @see org.openmrs.module.mohappointment.db.AppointmentDAO#getAllWaitingAppointmentsByPatient(org.openmrs.Patient,
+	 *      org.openmrs.module.mohappointment.model.AppointmentState,
+	 *      java.util.Date)
+	 */
+	@Override
+	public Collection<Appointment> getAllWaitingAppointmentsByPatient(
+			Patient patient, AppointmentState state, Date appointmentDate)
+			throws ParseException {
+
+		SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd");
+		// SimpleDateFormat javaFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Session session = sessionFactory.getCurrentSession();
+
+		Collection<Object[]> appointmentObjects = session
+				.createSQLQuery(
+						"SELECT appointment_id,appointment_date,note,attended,"
+								+ "reason_obs_id,visit_date_obs_id,location_id,provider_id,"
+								+ "service_id,encounter_id,patient_id,appointment_state_id,"
+								+ "voided,voided_date,void_reason,voided_by,creator,created_date"
+								+ " FROM moh_appointment"
+								+ " WHERE appointment_date = '"
+								+ sqlFormat.format(appointmentDate)
+								+ "' AND appointment_state_id = "
+								+ state.getAppointmentStateId().intValue()
+								+ " AND patient_id = "
+								+ patient.getPatientId().intValue()
+								+ " AND voided = 0 AND attended = 0;").list();
+
+		/**
+		 * 0-appointment_id,1-appointment_date,2-note,3-attended,4-reason_obs_id
+		 * , 5-visit_date_obs_id,6-location_id,7-provider_id,8-service_id,9-
+		 * encounter_id,
+		 * 10-patient_id,11-appointment_state_id,12-voided,13-voided_date
+		 * ,14-void_reason, 15-voided_by,16-creator,17-created_date
+		 */
+		Collection<Appointment> appointments = null;
+
+		for (Object[] obj : appointmentObjects) {
+
+			appointments = new ArrayList<Appointment>();
+			Appointment appointment = new Appointment();
+
+			appointment.setAppointmentId((Integer) obj[0]);
+			appointment.setAppointmentDate(appointmentDate);
+			appointment.setNote((String) obj[2]);
+			appointment.setAttended(false);
+
+			if (obj[4] != null)
+				appointment.setReason(Context.getObsService().getObs(
+						(Integer) obj[4]));
+
+			if (obj[5] != null)
+				appointment.setNextVisitDate(Context.getObsService().getObs(
+						(Integer) obj[5]));
+
+			if (obj[6] != null)
+				appointment.setLocation(Context.getLocationService()
+						.getLocation((Integer) obj[6]));
+
+			if (obj[7] != null)
+				appointment.setProvider(Context.getPersonService().getPerson(
+						(Integer) obj[7]));
+
+			appointment.setService(getServiceById((Integer) obj[8]));
+
+			if (obj[9] != null)
+				appointment.setEncounter(Context.getEncounterService()
+						.getEncounter((Integer) obj[9]));
+
+			appointment.setPatient(patient);
+			appointment.setAppointmentState(state);
+			appointment.setVoided(false);
+
+			if (obj[17] != null) {
+
+				Date createdDate = sqlFormat.parse(obj[17].toString());
+				appointment.setCreatedDate(createdDate);
+			}
+
+			appointments.add(appointment);
+		}
+
+		return appointments;
 	}
 }

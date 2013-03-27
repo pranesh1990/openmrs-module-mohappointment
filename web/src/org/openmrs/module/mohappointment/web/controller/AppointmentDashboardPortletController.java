@@ -30,13 +30,16 @@ public class AppointmentDashboardPortletController extends PortletController {
 
 		try {
 
-			if (!AppointmentUtil.setAttendedAppointment(request))
-				log
-						.info("_______________Any appointment has not been attended");
-
-			if (!AppointmentUtil.cancelAppointment(request))
-				log
-						.info("_______________Any appointment has not been cancelled");
+			AppointmentUtil.setAttendedAppointment(request);
+			AppointmentUtil.cancelAppointment(request);
+			
+//			if (!AppointmentUtil.setAttendedAppointment(request))
+//				log
+//						.info("_______________Any appointment has not been attended");
+//
+//			if (!AppointmentUtil.cancelAppointment(request))
+//				log
+//						.info("_______________Any appointment has not been cancelled");
 
 			Patient p = Context.getPatientService().getPatient(
 					Integer.valueOf(request.getParameter("patientId")));

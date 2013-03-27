@@ -3,10 +3,13 @@
  */
 package org.openmrs.module.mohappointment.impl;
 
+import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.openmrs.Concept;
+import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.module.mohappointment.db.AppointmentDAO;
 import org.openmrs.module.mohappointment.model.Appointment;
@@ -155,6 +158,17 @@ public class AppointmentService implements IAppointmentService {
 	@Override
 	public ServiceProviders getServiceProviderById(int serviceProviderId) {
 		return appointmentDAO.getServiceProviderById(serviceProviderId);
+	}
+
+	/**
+	 * @throws ParseException 
+	 * @see org.openmrs.module.mohappointment.service.IAppointmentService#getAllWaitingAppointmentsByPatient(org.openmrs.Patient, org.openmrs.module.mohappointment.model.AppointmentState)
+	 */
+	@Override
+	public Collection<Appointment> getAllWaitingAppointmentsByPatient(
+			Patient patient, AppointmentState state, Date appointmentDate) throws ParseException {
+		return appointmentDAO
+				.getAllWaitingAppointmentsByPatient(patient, state, appointmentDate);
 	}
 
 }
