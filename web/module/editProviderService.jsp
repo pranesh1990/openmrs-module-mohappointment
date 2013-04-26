@@ -3,17 +3,17 @@
 <openmrs:require privilege="Edit Provider Service" otherwise="/login.htm" redirect="/module/mohappointment/serviceProvider.list"/>
 
 <script type="text/javascript">
-	var $j = jQuery.noConflict();
+	var $app = jQuery.noConflict();
 	
-	$j(document).ready(function(){
-		$j("#btEdit").click(function(){
+	$app(document).ready(function(){
+		$app("#btEdit").click(function(){
 			if(validateFormFields()){
 				if(confirm("<spring:message code='@MODULE_ID@.general.save.confirm'/>"))
 					this.form.submit();
 			}
 		});
 		
-		$j("#btDelete").click(function(){
+		$app("#btDelete").click(function(){
 			if(validateFormFields()){
 				if(confirm("<spring:message code='@MODULE_ID@.general.save.confirm'/>"))
 					this.form.submit();
@@ -24,38 +24,38 @@
 	function validateFormFields(){
 		var valid=true;
 		if(document.getElementsByName("provider")[0].value==''){
-			$j("#providerError").html("*");
-			$j("#providerError").addClass("error");
+			$app("#providerError").html("*");
+			$app("#providerError").addClass("error");
 			valid=false;
 		} else {
-			$j("#providerError").html("");
-			$j("#providerError").removeClass("error");
+			$app("#providerError").html("");
+			$app("#providerError").removeClass("error");
 		}
 
 		if(document.getElementById("service").value==''){
-			$j("#serviceError").html("*");
-			$j("#serviceError").addClass("error");
+			$app("#serviceError").html("*");
+			$app("#serviceError").addClass("error");
 			valid=false;
 		} else {
-			$j("#serviceError").html("");
-			$j("#serviceError").removeClass("error");
+			$app("#serviceError").html("");
+			$app("#serviceError").removeClass("error");
 		}
 
-		if($j("#startDate").val()==''){
-			$j("#startDateError").html("*");
-			$j("#startDateError").addClass("error");
+		if($app("#startDate").val()==''){
+			$app("#startDateError").html("*");
+			$app("#startDateError").addClass("error");
 			valid=false;
 		} else {
-			$j("#startDateError").html("");
-			$j("#startDateError").removeClass("error");
+			$app("#startDateError").html("");
+			$app("#startDateError").removeClass("error");
 		}
 
 		if(!valid){
-			$j("#errorDiv").html("<spring:message code='@MODULE_ID@.general.fillbeforesubmit'/>");
-			$j("#errorDiv").addClass("error");
+			$app("#errorDiv").html("<spring:message code='@MODULE_ID@.general.fillbeforesubmit'/>");
+			$app("#errorDiv").addClass("error");
 		} else {
-			$j("#errorDiv").html("");
-			$j("#errorDiv").removeClass("error");
+			$app("#errorDiv").html("");
+			$app("#errorDiv").removeClass("error");
 		}
 		
 		return valid;
@@ -64,6 +64,7 @@
 
 <div id="errorDiv"></div><br/>
 
+<div id="edit_provider">
 <form action="editServiceProvider.form?edit=true" method="get" class="box">
 
 	<table>
@@ -100,3 +101,4 @@
 	</table>
 
 </form>
+</div>

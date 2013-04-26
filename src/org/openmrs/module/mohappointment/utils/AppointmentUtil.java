@@ -5,6 +5,7 @@ package org.openmrs.module.mohappointment.utils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -582,6 +583,42 @@ public class AppointmentUtil {
 			}
 
 		return false;
+	}
+
+	/**
+	 * Gets the specified Stated (Appointment States) Appointments for the given
+	 * Patient at the specified service.
+	 * 
+	 * @param patient
+	 *            the patient to be matched in order to get his/her appointments
+	 * @param state
+	 *            the Appointment State to be matched while returning
+	 *            Appointments
+	 * @param appointmentDate
+	 *            the appointment date to be matched
+	 * @param service
+	 *            the service to be matched
+	 * @return the Appointments list matched
+	 * @throws ParseException
+	 */
+	public static Collection<Appointment> getAllWaitingAppointmentsByPatientAtService(
+			Patient patient, AppointmentState state, Date appointmentDate,
+			Services service) throws ParseException {
+
+		IAppointmentService appointmentService = getAppointmentService();
+		Collection<Appointment> appointments = new ArrayList<Appointment>();
+
+		for (Appointment appointment : appointmentService
+				.getAllWaitingAppointmentsByPatient(patient, state,
+						appointmentDate)) {
+
+			if (appointment.getService().getServiceId().intValue() == service
+					.getServiceId().intValue())
+				appointments.add(appointment);
+
+		}
+
+		return appointments;
 	}
 
 }

@@ -101,8 +101,8 @@
 		</table>
 		<div class="list_footer">
 			<div class="list_footer_info">&nbsp;&nbsp;&nbsp;</div>
-			<div class="list_footer_pages">		
-				&nbsp;&nbsp;&nbsp;	
+			<div class="list_footer_pages">
+				&nbsp;&nbsp;&nbsp;
 			</div>
 			<div style="clear: both"></div>
 		</div>
@@ -110,6 +110,7 @@
 </div>
 <br/><br/>
 
+<!--
 <div style="searchParameterBox">
 	<div class="list_container" style="width: 99%">
 		<div class="list_title">
@@ -155,7 +156,7 @@
 		</div>
 	</div>
 
-</div>
+</div> -->
 
 <div id="divDlg"></div>
 <div id="dlgCtnt" style="display: none;"></div>

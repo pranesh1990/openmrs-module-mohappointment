@@ -8,15 +8,6 @@
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
 
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery-1.3.2.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery.bigframe.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.core.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.dialog.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.draggable.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.resizable.js" />
-
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/ui.all.css" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/demo.css" />
-
 
 <%@ include file="templates/serviceProviderHeader.jsp"%>
 
@@ -26,31 +17,24 @@
 <br/><br/>
 
 <script type="text/javascript">
-	var $j = jQuery.noConflict();
+	var $app = jQuery.noConflict();
 	
-	$j(document).ready(function(){
-		$j("#btEdit").click(function(){
-			if(validateFormFields()){
-				if(confirm("<spring:message code='@MODULE_ID@.general.save.confirm'/>"))
-					this.form.submit();
-			}
-		});
+	// Checking whether the User wants to delete the data
+	function submitData(spId){
+		var sp = "#deleteCtrl_"+spId
+		var hrefValue = "serviceProvider.list?deleteSP=true&serviceProviderId=" + spId;
 		
-		$j("#btDelete").click(function(){
-			if(validateFormFields()){
-				if(confirm("<spring:message code='@MODULE_ID@.general.save.confirm'/>"))
-					this.form.submit();
-			}
-		});
-	});
+		if(confirm("<spring:message code='@MODULE_ID@.general.delete.confirm'/>"))
+			$app(sp).attr("href", hrefValue);
+	}
 	
 	function showExportDialog(){
 		showDialog();
 	}
 	
 	function showDialog(){
-		$j("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.export.data'/>'><p><div id='result'>"+$j('#dlgCtnt').html()+"</div></p></div>");
-		$j("#dialog").dialog({
+		$app("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.export.data'/>'><p><div id='result'>"+$app('#dlgCtnt').html()+"</div></p></div>");
+		$app("#dialog").dialog({
 			zIndex: 980,
 			bgiframe: true,
 			height: 220,
@@ -65,8 +49,8 @@
 	}
 	
 	function showEditWindow(pId){
-		$j("#divWindow").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.appointment.service.provider.form'/>'><div id='result'>"+$j('#editWindow').html()+"</div></div>");
-		$j("#dialog").dialog({
+		$app("#divWindow").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.appointment.service.provider.form'/>'><div id='result'>"+$app('#editWindow').html()+"</div></div>");
+		$app("#dialog").dialog({
 			zIndex: 980,
 			bgiframe: true,
 			height: 220,
@@ -75,8 +59,8 @@
 		});
 
 		var url="editServiceProvider.form?serviceProviderId="+pId;
-		$j.get(url, function(data) {
-			  	$j("#result").html(data);
+		$app.get(url, function(data) {
+			  	$app("#result").html(data);
 		});	
 	}
 
@@ -86,9 +70,6 @@
 			DIVtoRemove.parentNode.removeChild(DIVtoRemove);
 		}
 	}
-
-	$j(document).ready(function(){
-	});
 		
 </script>
 
@@ -133,26 +114,22 @@
 					<td class="rowValue ${status.count%2!=0?'even':''}">${((param.page-1)*pageSize)+status.count}.</td>
 					<td class="rowValue ${status.count%2!=0?'even':''}">${sp.provider.personName}</td>
 					<td class="rowValue ${status.count%2!=0?'even':''}"><openmrs:formatDate date="${sp.startDate}" type="medium"/></td>
-					<td class="rowValue ${status.count%2!=0?'even':''}"><input onclick="showEditDialog('${sp.serviceProviderId}');" type="button" id="btEdit" value="<spring:message code='@MODULE_ID@.general.edit'/>"></td>			
+					<!-- <td class="rowValue ${status.count%2!=0?'even':''}"><input type="button" id="providerServiceEdit" value="<spring:message code='@MODULE_ID@.general.edit'/>"></td> -->
+					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="serviceProvider.form?editSP=true&editServiceProviderId=${sp.serviceProviderId}"><spring:message code='@MODULE_ID@.general.edit'/></a>
+					 | <a id="deleteCtrl_${sp.serviceProviderId}" onclick="submitData(${sp.serviceProviderId});" href="#"><spring:message code='@MODULE_ID@.general.delete'/></a></td>	
 				</tr>
 			</c:forEach>
 		</table>
 		<div class="list_footer">
 			<div class="list_footer_info">&nbsp;&nbsp;&nbsp;</div>
-			<div class="list_footer_pages">		
-				&nbsp;&nbsp;&nbsp;	
+			<div class="list_footer_pages">
+				&nbsp;&nbsp;&nbsp;
 			</div>
 			<div style="clear: both"></div>
 		</div>
 	</div>
 
 </div>
-<!--  <div id="divWindow"></div> -->
-<!--  <div id="editWindow" style="display: none;">
-	<form action="serviceProvider.list?edit=true" method="get" class="box"> -->
-		
-	<!--  </form> -->
-<!--  </div> -->
 
 <div id="divDlg"></div>
 <div id="dlgCtnt" style="display: none;">
@@ -161,11 +138,6 @@
 		<%@ include file="templates/exportForm.jsp"%>
 		
 	</form>
-</div>
-
-<div id="divWindow"></div>
-<div id="editWindow" style="display: none;">
-	<%@ include file="editProviderService.jsp"%>
 </div>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

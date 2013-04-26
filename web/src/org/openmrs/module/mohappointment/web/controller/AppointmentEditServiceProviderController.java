@@ -53,7 +53,7 @@ public class AppointmentEditServiceProviderController extends
 
 		if (request.getParameter("edit") != null) {
 
-			log.info("<<<<<<<" + request.getParameter("edit") + ">>>>>>>>");
+			log.info("____________________<<<<<<<" + request.getParameter("edit") + ">>>>>>>>");
 
 			if (editServiceProvider(request))
 				request.getSession().setAttribute(

@@ -79,7 +79,7 @@
 <div class="box">
 	<table>
 		<tr>
-			<td>Patient Name/Patient Identifier</td>
+			<td><spring:message code="@MODULE_ID@.general.patient.identifier"/></td>
 			<td><input type="text" style="width:25em" autocomplete="off" value="" onKeyUp='javascript:patientListInTable(this,1);' name='n_1' id='n_1'/></td>
 		</tr>
 	</table>

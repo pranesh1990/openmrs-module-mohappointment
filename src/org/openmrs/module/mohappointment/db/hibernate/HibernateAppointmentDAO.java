@@ -474,7 +474,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		// "SELECT * FROM service_providers WHERE voided  = FALSE")
 		// .list();
 		Collection<ServiceProviders> serviceProviders = session.createCriteria(
-				ServiceProviders.class).list();
+				ServiceProviders.class).add(Restrictions.eq("voided", false)).list();
 
 		return serviceProviders;
 	}
@@ -609,11 +609,10 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		 * 10-patient_id,11-appointment_state_id,12-voided,13-voided_date
 		 * ,14-void_reason, 15-voided_by,16-creator,17-created_date
 		 */
-		Collection<Appointment> appointments = null;
+		Collection<Appointment> appointments = new ArrayList<Appointment>();
 
 		for (Object[] obj : appointmentObjects) {
 
-			appointments = new ArrayList<Appointment>();
 			Appointment appointment = new Appointment();
 
 			appointment.setAppointmentId((Integer) obj[0]);
@@ -646,6 +645,12 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			appointment.setPatient(patient);
 			appointment.setAppointmentState(state);
 			appointment.setVoided(false);
+
+			if (obj[16] != null) {
+
+				appointment.setCreator(Context.getUserService().getUser(
+						(Integer) obj[16]));
+			}
 
 			if (obj[17] != null) {
 

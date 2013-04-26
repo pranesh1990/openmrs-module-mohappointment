@@ -18,11 +18,13 @@
 <!-- <b class="boxHeader"><spring:message code="@MODULE_ID@.appointment.service.provider.current"/></b> -->
 <form action="serviceProvider.form?save=true" method="post" class="box">
 	<div id="errorDiv"></div><br/>
+	
+	<input type="hidden" name="spId" value="${spId}"/>
 	<table>
 		<tr>
 			<td><b><spring:message code="@MODULE_ID@.general.provider"/></b></td>
 			<td><img border="0" src="<openmrs:contextPath/>/moduleResources/@MODULE_ID@/images/help.gif" title="?"/></td>
-			<td><openmrs_tag:userField roles="Provider" formFieldName="provider"/></td>
+			<td><openmrs_tag:userField roles="Provider" formFieldName="provider" initialValue="${provider.userId}" /></td>
 			<td valign="top"><span id="providerError"></span></td>
 		</tr>
 		<tr>
@@ -40,7 +42,7 @@
 		<tr>
 			<td><b><spring:message code="@MODULE_ID@.general.startdate"/></b></td>
 			<td><img border="0" src="<openmrs:contextPath/>/moduleResources/@MODULE_ID@/images/help.gif" title="?"/></td>
-			<td><input type="text" name="startDate" id="startDate" size="11" onclick="showCalendar(this);"/></td>
+			<td><input type="text" value="${startDate}" name="startDate" id="startDate" size="11" onclick="showCalendar(this);"/></td>
 			<td valign="top"><span id="startDateError"></span></td>
 		</tr>
 		<tr>

@@ -49,8 +49,8 @@
 	<classpathentry kind="lib" path="lib-common/velocity-1.6-beta1.jar"/>
 	<classpathentry kind="lib" path="lib-common/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib-common/xmlunit-1.2.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-2.5.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-api-1.6.2.12911-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

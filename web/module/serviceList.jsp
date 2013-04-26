@@ -102,7 +102,9 @@
 					<td class="rowValue ${status.count%2!=0?'even':''}">${((param.page-1)*pageSize)+status.count}.</td>
 					<td class="rowValue ${status.count%2!=0?'even':''}">${service.name}</td>	
 					<td class="rowValue ${status.count%2!=0?'even':''}">${service.description}</td>
-					<td class="rowValue ${status.count%2!=0?'even':''}"><input onclick="showEditWindow('${service.serviceId}');" type="button" id="btEdit" value="<spring:message code='@MODULE_ID@.general.edit'/>"></td>
+					<!--<td class="rowValue ${status.count%2!=0?'even':''}"><input onclick="showEditWindow('${service.serviceId}');" type="button" id="btEdit" value="<spring:message code='@MODULE_ID@.general.edit'/>"></td> -->
+					<td class="rowValue ${status.count%2!=0?'even':''}"><a href="service.form?editService=true&serviceId=${service.serviceId}"><spring:message code='@MODULE_ID@.general.edit'/></a>
+					 | <a href="service.form?deleteService=true&serviceId=${service.serviceId}"><spring:message code='@MODULE_ID@.general.delete'/></a></td>
 				</tr>
 			</c:forEach>
 		</table>
