@@ -389,9 +389,10 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	public Collection<Integer> getPersonsByService(Services service) {
 		Session session = sessionFactory.getCurrentSession();
 
-		Collection<Integer> providers = session.createSQLQuery(
-				"SELECT provider FROM moh_appointment_service_providers WHERE service = "
-						+ service.getServiceId()).list();
+		Collection<Integer> providers = session
+				.createSQLQuery(
+						"SELECT provider FROM moh_appointment_service_providers WHERE voided = 0 AND service = "
+								+ service.getServiceId()).list();
 
 		return providers;
 	}
@@ -410,6 +411,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		if (provider != null) {
 			ServiceProviders sp = (ServiceProviders) session
 					.createCriteria(ServiceProviders.class)
+					.add(Restrictions.eq("voided", false))
 					.add(Restrictions.eq("provider", provider)).uniqueResult();
 			try {
 				return sp.getService();
@@ -473,8 +475,9 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		// .createSQLQuery(
 		// "SELECT * FROM service_providers WHERE voided  = FALSE")
 		// .list();
-		Collection<ServiceProviders> serviceProviders = session.createCriteria(
-				ServiceProviders.class).add(Restrictions.eq("voided", false)).list();
+		Collection<ServiceProviders> serviceProviders = session
+				.createCriteria(ServiceProviders.class)
+				.add(Restrictions.eq("voided", false)).list();
 
 		return serviceProviders;
 	}
@@ -493,6 +496,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			log.info("");
 			List<ServiceProviders> serviceProviders = session
 					.createCriteria(ServiceProviders.class)
+					.add(Restrictions.eq("voided", false))
 					.add(Restrictions.eq("provider", provider)).list();
 
 			if (serviceProviders != null)
