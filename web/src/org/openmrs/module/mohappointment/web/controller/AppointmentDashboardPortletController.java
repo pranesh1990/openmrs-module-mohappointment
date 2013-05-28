@@ -32,15 +32,7 @@ public class AppointmentDashboardPortletController extends PortletController {
 
 			AppointmentUtil.setAttendedAppointment(request);
 			AppointmentUtil.cancelAppointment(request);
-			
-//			if (!AppointmentUtil.setAttendedAppointment(request))
-//				log
-//						.info("_______________Any appointment has not been attended");
-//
-//			if (!AppointmentUtil.cancelAppointment(request))
-//				log
-//						.info("_______________Any appointment has not been cancelled");
-
+	
 			Patient p = Context.getPatientService().getPatient(
 					Integer.valueOf(request.getParameter("patientId")));
 
@@ -57,10 +49,6 @@ public class AppointmentDashboardPortletController extends PortletController {
 			// model.put("appointments", appointments);
 			request.setAttribute("appointments", appointments);
 			request.setAttribute("patientId", p.getPatientId());
-			//		
-			// request.setAttribute("arraySz", appointments.size());
-			//		
-			// model.put("sizeyaarray", appointmentIds.size());
 
 		} catch (Exception e) {
 			log
