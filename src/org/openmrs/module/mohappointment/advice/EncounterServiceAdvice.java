@@ -14,6 +14,8 @@
 package org.openmrs.module.mohappointment.advice;
 
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.logging.Log;
@@ -50,9 +52,11 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 	@Override
 	public void afterReturning(Object returnVal, Method method, Object[] args,
 			Object target) throws Throwable {
-		//handleSavePrimaryCareEncounter(returnVal, method, args);
+		// handleSavePrimaryCareEncounter(returnVal, method, args);
 
-		//handleSaveNextVisitEncounter(returnVal, method, args);
+		handleSaveNextVisitEncounter(returnVal, method, args);
+
+		handleSaveEncounterThroughHtmlForms(returnVal, method, args);
 	}
 
 	/**
@@ -140,7 +144,8 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 	 * Gets an Obs or Encounter while anywhere a SaveObs action or SaveEncounter
 	 * is done and saves it to the upcoming list
 	 * 
-	 * @param returnVal the value to be returned by the methods
+	 * @param returnVal
+	 *            the value to be returned by the methods
 	 * 
 	 * @param returnVal
 	 *            the returned Encounter when saved
@@ -148,13 +153,12 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 	 *            the name of the Method to catch
 	 * @param args
 	 *            the arguments passed to the method to catch
+	 * @throws ParseException
 	 */
 	private void handleSaveNextVisitEncounter(Object returnVal, Method method,
-			Object[] args) {
+			Object[] args) throws ParseException {
 		boolean stateChanged = false;
 		boolean saved = false;
-		IAppointmentService service = Context
-				.getService(IAppointmentService.class);
 		Obs nextVisitDate = null;
 		Obs reasonForVisit = null;
 
@@ -180,15 +184,11 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 
 							nextVisitDate = obs;
 							appointmentFound = true;
-							log
-									.info("__________________>>>>>>>>>>>>>>>>>> NEXT_SCHEDULED_VISIT");
 						}
 
 						if (obs.getConcept().getConceptId() == ConstantValues.REASON_FOR_VISIT) {
 
 							reasonForVisit = obs;
-							log
-									.info("__________________>>>>>>>>>>>>>>>>>> REASON_FOR_VISIT");
 						}
 					}
 
@@ -204,51 +204,26 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 					appointment.setAppointmentDate(nextVisitDate
 							.getValueDatetime());
 					appointment.setNextVisitDate(nextVisitDate);
-					log
-							.info("_________________>>>>>>>>>>>>>>>> Next Visit date obs id : "
-									+ nextVisitDate.getEncounter()
-											.getEncounterId());
 					appointment.setAttended(false);
 					appointment.setVoided(false);
 					appointment.setReason(reasonForVisit);
 					// appointment.setState(Null.enter(appointment));
-					appointment.setAppointmentState(new AppointmentState(3,
-							"UPCOMING"));
+//					appointment.setAppointmentState(new AppointmentState(3,
+//							"UPCOMING"));
 					appointment.setCreatedDate(new Date());
 					appointment.setCreator(Context.getAuthenticatedUser());
 
 					// Saving the appointment
-					service.saveAppointment(appointment);
-					log
-							.info("__________________>>>>>>>>>>>>>>>>>> service.saveAppointment(appointment);"
-									+ service.getAllAppointments().size());
+					AppointmentUtil.saveUpcomingAppointment(appointment);
 					saved = true;
 
 					if (saved == true && stateChanged == false) {
-
-						// Updating the Appointment State in the DB (moving from
-						// Null to Confirmed)
-						// appointment.getState().confirmed();
-						// appointment.getState().upcoming();
-						log.info("__________________>>>>>>>>>>>>>>>>>>"
-								+ " appointment.getState().confirmed();"
-								+ appointment.getAppointmentState().toString());
-
-						// service.updateAppointment(appointment);
-
-						log.info("__________________>>>>>>>>> "
-								+ "AFTER SAVING THE APPOINTMENT >>>>>>>>>"
-								+ service.getAppointmentById(
-										appointment.getAppointmentId())
-										.toString());
 
 						stateChanged = true;
 					}
 
 					if (stateChanged == true) {
 						saved = false;
-						log
-								.info("__________________>>>>>>>>>>>>>>>>>> saved = false;");
 					}
 				}
 			}
@@ -256,4 +231,50 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 			return;
 	}
 
+	/**
+	 * Handles an Encounter while anywhere a SaveEncounter is done and sets all
+	 * waiting appointments for the same Patient on same Date as attended.
+	 * 
+	 * @param returnVal
+	 *            the value to be returned by the methods
+	 * 
+	 * @param returnVal
+	 *            the returned Encounter when saved
+	 * @param method
+	 *            the name of the Method to catch
+	 * @param args
+	 *            the arguments passed to the method to catch
+	 * @throws ParseException
+	 */
+	private void handleSaveEncounterThroughHtmlForms(Object returnVal,
+			Method method, Object[] args) throws ParseException {
+
+		if (method.getName().equals("saveEncounter")) {
+
+			Encounter encounter = (Encounter) returnVal;
+
+			if (encounter.getDateCreated().equals(new Date())
+					&& encounter.getEncounterDatetime().equals(new Date())
+					&& encounter.getForm() != null
+					&& !encounter.isVoided()
+					&& encounter.getLocation().equals(
+							Context.getLocationService().getDefaultLocation())) {
+
+				log.info("");
+
+				Collection<Appointment> waitingAppointments = AppointmentUtil
+						.getAllWaitingAppointmentsByPatientAtService(encounter
+								.getPatient(), new AppointmentState(4,
+								"WAITING"), encounter.getEncounterDatetime(),
+								null);
+
+				if (waitingAppointments != null)
+					if (waitingAppointments.size() > 0) {
+						for (Appointment appointment : waitingAppointments)
+							AppointmentUtil
+									.saveAttendedAppointment(appointment);
+					}
+			}
+		}
+	}
 }

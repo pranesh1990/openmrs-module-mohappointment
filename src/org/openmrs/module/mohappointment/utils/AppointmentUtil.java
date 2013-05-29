@@ -53,9 +53,11 @@ public class AppointmentUtil {
 	 */
 	public static HashMap<Integer, String> createConceptCodedOptions(
 			Integer codedConceptQuestionId) {
+
 		HashMap<Integer, String> answersMap = new HashMap<Integer, String>();
 		Concept questionConcept = Context.getConceptService().getConcept(
 				Integer.valueOf(codedConceptQuestionId));
+
 		if (questionConcept != null) {
 			for (ConceptAnswer ca : questionConcept.getAnswers()) {
 				answersMap.put(ca.getAnswerConcept().getConceptId(), ca
@@ -130,10 +132,8 @@ public class AppointmentUtil {
 	 */
 	public static Services getServiceByConcept(Concept concept) {
 
-		IAppointmentService ias = getAppointmentService();
-
-		if (ias != null)
-			for (Services service : ias.getServices()) {
+		if (getAppointmentService() != null)
+			for (Services service : getAppointmentService().getServices()) {
 				if (service.getConcept().getConceptId().intValue() == concept
 						.getConceptId().intValue())
 					return service;
@@ -154,14 +154,13 @@ public class AppointmentUtil {
 	public static boolean cancelAppointment(HttpServletRequest request) {
 
 		Integer appointmentId = 0;
-		IAppointmentService service = getAppointmentService();
 
 		if (request.getParameter("appointmentId") != null)
 			if (!request.getParameter("appointmentId").equalsIgnoreCase("")) {
 
 				appointmentId = Integer.valueOf(request
 						.getParameter("appointmentId"));
-				Appointment appointment = service
+				Appointment appointment = getAppointmentService()
 						.getAppointmentById(appointmentId);
 
 				if (request.getParameter("cancel") != null)
@@ -170,7 +169,7 @@ public class AppointmentUtil {
 						appointment.setVoided(true);
 						appointment.setAppointmentState(new AppointmentState(1,
 								"NULL"));
-						service.saveAppointment(appointment);
+						getAppointmentService().saveAppointment(appointment);
 
 						return true;
 					}
@@ -190,14 +189,13 @@ public class AppointmentUtil {
 	public static boolean setAttendedAppointment(HttpServletRequest request) {
 
 		Integer appointmentId = 0;
-		IAppointmentService service = getAppointmentService();
 
 		if (request.getParameter("appointmentId") != null)
 			if (!request.getParameter("appointmentId").equalsIgnoreCase("")) {
 				appointmentId = Integer.valueOf(request
 						.getParameter("appointmentId"));
 
-				Appointment appointment = service
+				Appointment appointment = getAppointmentService()
 						.getAppointmentById(appointmentId);
 
 				if (request.getParameter("attended") != null)
@@ -206,11 +204,7 @@ public class AppointmentUtil {
 						appointment.setAttended(true);
 						appointment.setAppointmentState(new AppointmentState(9,
 								"ATTENDED"));
-						service.saveAppointment(appointment);
-
-						System.out
-								.println("_________CANCELED APPOINTMENT__________\n"
-										+ appointment.toString());
+						getAppointmentService().saveAppointment(appointment);
 
 						return true;
 					}
@@ -256,24 +250,24 @@ public class AppointmentUtil {
 			Services selectedService) {
 
 		List<Appointment> appointments = new ArrayList<Appointment>();
-		IAppointmentService ias = getAppointmentService();
 		List<Services> services = null;
 		Services servise = null;
 
 		if ((authUser.getPerson().getPersonId().intValue() > 1)) {
-			services = (List<Services>) ias.getServicesByProvider(authUser
-					.getPerson());
+			services = (List<Services>) getAppointmentService()
+					.getServicesByProvider(authUser.getPerson());
 		}
 
 		if (services != null && selectedService == null) {
 			if (services.size() > 1) {
 
 				appointments = getNoSelectedService(authUser, startDate,
-						endDate, appointments, ias, services);
+						endDate, appointments, getAppointmentService(),
+						services);
 			} else if (services.size() == 1) {
 
 				appointments = getWhereProviderWorksInOneService(authUser,
-						startDate, endDate, ias, servise);
+						startDate, endDate, getAppointmentService(), servise);
 			}
 
 		}
@@ -281,7 +275,7 @@ public class AppointmentUtil {
 		else if (selectedService != null) {
 
 			appointments = getFilteredBySelectedService(authUser, startDate,
-					endDate, selectedService, ias);
+					endDate, selectedService, getAppointmentService());
 		}
 
 		return appointments;
@@ -294,6 +288,7 @@ public class AppointmentUtil {
 	private static List<Appointment> getFilteredBySelectedService(
 			User authUser, Date startDate, Date endDate,
 			Services selectedService, IAppointmentService ias) {
+
 		List<Appointment> appointments;
 		List<Integer> waitingAppointmentIds = new ArrayList<Integer>();
 		Object[] conditionsWaitingAppointment = { null, null, null, startDate,
@@ -415,10 +410,8 @@ public class AppointmentUtil {
 	 */
 	public static void saveWaitingAppointment(Appointment appointment) {
 
-		IAppointmentService service = getAppointmentService();
-
 		appointment.setAppointmentState(new AppointmentState(4, "WAITING"));
-		service.saveAppointment(appointment);
+		getAppointmentService().saveAppointment(appointment);
 	}
 
 	/**
@@ -430,11 +423,43 @@ public class AppointmentUtil {
 	 */
 	public static void saveAttendedAppointment(Appointment appointment) {
 
-		IAppointmentService service = getAppointmentService();
-
 		appointment.setAppointmentState(new AppointmentState(9, "ATTENDED"));
 		appointment.setAttended(true);
-		service.saveAppointment(appointment);
+		getAppointmentService().saveAppointment(appointment);
+	}
+
+	/**
+	 * Gets the specified Stated (Appointment States) Appointments for the given
+	 * Patient with the
+	 * 
+	 * @param patient
+	 *            the patient to be matched in order to get his/her appointments
+	 * @param state
+	 *            the Appointment State to be matched while returning
+	 *            Appointments
+	 * @param service
+	 *            the patient to be matched in order to get his/her appointments
+	 * @param appointmentDate
+	 *            the Appointment State to be matched while returning
+	 *            Appointments
+	 * @return the Appointments list matched
+	 * @throws ParseException
+	 */
+	public static Boolean patientHasAlreadyUpcomingAppointment(Patient patient,
+			AppointmentState state, Services service, Date appointmentDate,
+			Integer conceptId) throws ParseException {
+
+		Collection<Appointment> upcomingAppointments = getAppointmentService()
+				.getAllWaitingAppointmentsByPatient(patient, state,
+						appointmentDate);
+
+		if (upcomingAppointments != null)
+			for (Appointment appointment : upcomingAppointments)
+
+				if (appointment.getNextVisitDate().getConcept().getConceptId() == conceptId)
+					return true;
+
+		return false;
 	}
 
 	/**
@@ -443,13 +468,20 @@ public class AppointmentUtil {
 	 * @param appointment
 	 *            the appointment to be saved: this should be including setting
 	 *            all attributes.
+	 * @throws ParseException
 	 */
-	public static void saveUpcomingAppointment(Appointment appointment) {
-
-		IAppointmentService service = getAppointmentService();
+	public static void saveUpcomingAppointment(Appointment appointment)
+			throws ParseException {
 
 		appointment.setAppointmentState(new AppointmentState(3, "UPCOMING"));
-		service.saveAppointment(appointment);
+
+		if (!patientHasAlreadyUpcomingAppointment(appointment.getPatient(),
+				new AppointmentState(3, "UPCOMING"), null,
+				appointment.getAppointmentDate(), appointment
+						.getNextVisitDate().getConcept().getConceptId())) {
+
+			getAppointmentService().saveAppointment(appointment);
+		}
 	}
 
 	/**
@@ -461,9 +493,7 @@ public class AppointmentUtil {
 	 */
 	public static Appointment getWaitingAppointmentById(int id) {
 
-		IAppointmentService service = getAppointmentService();
-
-		return service.getAppointmentById(id);
+		return getAppointmentService().getAppointmentById(id);
 	}
 
 	/**
@@ -475,9 +505,7 @@ public class AppointmentUtil {
 	 */
 	public static void editServiceProvider(ServiceProviders serviceProvider) {
 
-		IAppointmentService service = getAppointmentService();
-
-		service.saveServiceProviders(serviceProvider);
+		getAppointmentService().saveServiceProviders(serviceProvider);
 	}
 
 	/**
@@ -487,9 +515,7 @@ public class AppointmentUtil {
 	 */
 	public static List<Services> getAllServices() {
 
-		IAppointmentService services = getAppointmentService();
-
-		return (List<Services>) services.getServices();
+		return (List<Services>) getAppointmentService().getServices();
 	}
 
 	/**
@@ -499,9 +525,8 @@ public class AppointmentUtil {
 	 */
 	public static List<ServiceProviders> getAllServiceProviders() {
 
-		IAppointmentService serviceProviders = getAppointmentService();
-
-		return (List<ServiceProviders>) serviceProviders.getServiceProviders();
+		return (List<ServiceProviders>) getAppointmentService()
+				.getServiceProviders();
 	}
 
 	/**
@@ -512,9 +537,7 @@ public class AppointmentUtil {
 	 */
 	public static ServiceProviders getServiceProvidersById(int id) {
 
-		IAppointmentService service = getAppointmentService();
-
-		return service.getServiceProviderById(id);
+		return getAppointmentService().getServiceProviderById(id);
 	}
 
 	/**
@@ -531,20 +554,23 @@ public class AppointmentUtil {
 	public static List<Appointment> getAppointmentsByPatientAndDate(
 			Patient patient, Services clinicalService, Date date) {
 
-		IAppointmentService service = getAppointmentService();
 		Object[] conditions = { patient.getPatientId(), null, null, date, null,
 				null, null, null };
+		List<Integer> allAppointments = getAppointmentService()
+				.getAppointmentIdsByMulti(conditions, 100);
 		List<Appointment> appointments = new ArrayList<Appointment>();
 
 		if (clinicalService != null) {
-			for (Integer id : service.getAppointmentIdsByMulti(conditions, 100)) {
-				Appointment app = service.getAppointmentById(id);
+			for (Integer id : allAppointments) {
+				Appointment app = getAppointmentService()
+						.getAppointmentById(id);
 				if (app.getService().equals(clinicalService))
 					appointments.add(app);
 			}
 		} else
-			for (Integer id : service.getAppointmentIdsByMulti(conditions, 100))
-				appointments.add(service.getAppointmentById(id));
+			for (Integer id : allAppointments)
+				appointments
+						.add(getAppointmentService().getAppointmentById(id));
 
 		return appointments;
 	}
@@ -570,13 +596,12 @@ public class AppointmentUtil {
 			AppointmentState state, Services service, Date appointmentDate)
 			throws ParseException {
 
-		IAppointmentService appointmentService = getAppointmentService();
+		Collection<Appointment> appointments = getAppointmentService()
+				.getAllWaitingAppointmentsByPatient(patient, state,
+						appointmentDate);
 
-		if (appointmentService.getAllWaitingAppointmentsByPatient(patient,
-				state, appointmentDate) != null)
-			for (Appointment appointment : appointmentService
-					.getAllWaitingAppointmentsByPatient(patient, state,
-							appointmentDate)) {
+		if (appointments != null)
+			for (Appointment appointment : appointments) {
 
 				if (appointment.getService().equals(service))
 					return true;
@@ -605,16 +630,18 @@ public class AppointmentUtil {
 			Patient patient, AppointmentState state, Date appointmentDate,
 			Services service) throws ParseException {
 
-		IAppointmentService appointmentService = getAppointmentService();
 		Collection<Appointment> appointments = new ArrayList<Appointment>();
-
-		for (Appointment appointment : appointmentService
+		Collection<Appointment> waitingAppointments = getAppointmentService()
 				.getAllWaitingAppointmentsByPatient(patient, state,
-						appointmentDate)) {
+						appointmentDate);
 
-			if (appointment.getService().getServiceId().intValue() == service
-					.getServiceId().intValue())
-				appointments.add(appointment);
+		for (Appointment appointment : waitingAppointments) {
+			if (service != null) {
+				if (appointment.getService().getServiceId().intValue() == service
+						.getServiceId().intValue())
+					appointments.add(appointment);
+			} else
+				return waitingAppointments;
 
 		}
 

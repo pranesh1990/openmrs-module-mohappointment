@@ -50,11 +50,11 @@
 	</extension>
 	
 	<!-- AOP -->
-	<!-- <advice>
+	<advice>
 		<point>org.openmrs.api.EncounterService</point>
 		<class>@MODULE_PACKAGE@.advice.EncounterServiceAdvice</class>
 	</advice>
-	<advice>
+	<!-- <advice>
 		<point>org.openmrs.api.ObsService</point>
 		<class>@MODULE_PACKAGE@.advice.ObsServiceAdvice</class>
 	</advice> -->

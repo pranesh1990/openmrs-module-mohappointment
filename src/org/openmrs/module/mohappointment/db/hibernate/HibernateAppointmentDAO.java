@@ -79,8 +79,6 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 		Collection<Appointment> appointments = session.createCriteria(
 				Appointment.class).list();
-		// Collection<Appointment> appointments = session.createSQLQuery(
-		// "SELECT * FROM appointment").list();
 
 		return appointments;
 	}
@@ -127,13 +125,9 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 						+ " WHERE appointment_id = "
 						+ appointment.getAppointmentId() + ";").executeUpdate();
 
-		log.info("________________________________________"
-				+ "UPDATE moh_appointment SET appointment_state_id = "
-				+ stateId + " WHERE appointment_id = "
-				+ appointment.getAppointmentId() + ";");
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -261,7 +255,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		return appointmentIds;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -288,7 +282,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	// ************* AppointmentState DB Code *************
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -303,7 +297,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		return states;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @seeorg.openmrs.module.mohappointment.db.AppointmentDAO#
@@ -326,7 +320,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 
 	// ************* Services and ServiceProviders DB Code *************
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -339,7 +333,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		session.save(service);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -352,7 +346,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		session.saveOrUpdate(serviceProvider);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -364,7 +358,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		saveService(service);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -376,7 +370,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		saveServiceProviders(serviceProvider);
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -395,7 +389,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		return providers;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -420,7 +414,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			return null;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -459,7 +453,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		return service;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see
@@ -469,10 +463,6 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	public Collection<ServiceProviders> getServiceProviders() {
 		Session session = sessionFactory.getCurrentSession();
 
-		// Collection<IServiceProviders> serviceProviders = session
-		// .createSQLQuery(
-		// "SELECT * FROM service_providers WHERE voided  = FALSE")
-		// .list();
 		Collection<ServiceProviders> serviceProviders = session
 				.createCriteria(ServiceProviders.class)
 				.add(Restrictions.eq("voided", false)).list();
@@ -515,7 +505,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			return null;
 	}
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see org.openmrs.module.mohappointment.db.AppointmentDAO#getServices()
@@ -524,44 +514,12 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	public Collection<Services> getServices() {
 		Session session = sessionFactory.getCurrentSession();
 
-		// Collection<Services> services = session.createSQLQuery(
-		// "SELECT * FROM service").list();
 		List<Services> services = session.createCriteria(Services.class).list();
 
 		return services;
 	}
 
 	public Collection<Integer> getAppointmentPatientName(String nameToMatch) {
-
-		/**
-		 * 
-		 nameToMatch = nameToMatch.replace(", ", " "); String[] names =
-		 * nameToMatch.split(" "); List<Integer> personIds = null;
-		 * 
-		 * String query = "";
-		 * 
-		 * query =
-		 * "SELECT DISTINCT(pn.person_id) FROM person_name pn INNER JOIN person p ON pn.person_id=p.person_id "
-		 * + "INNER JOIN trac_vct_client t ON p.person_id=t.client_id " +
-		 * "WHERE t.code_client='" + name + "'"; personIds =
-		 * getSession().createSQLQuery(query).list();
-		 * 
-		 * if (personIds == null || personIds.size() == 0) { query =
-		 * "SELECT DISTINCT(pn.person_id) FROM person_name pn INNER JOIN person p ON pn.person_id=p.person_id "
-		 * + "INNER JOIN trac_vct_client t ON p.person_id=t.client_id " +
-		 * "WHERE "; int i = 0; for (String n : names) { if (n != null &&
-		 * n.length() > 0) { if (i > 0) query += "AND "; query +=
-		 * "pn.given_name LIKE '" + n + "%' OR pn.middle_name LIKE '" + n +
-		 * "%' OR pn.family_name LIKE '" + n + "%' "; i++; } }
-		 * 
-		 * query += "ORDER BY pn.given_name;";
-		 * 
-		 * personIds = getSession().createSQLQuery(query).list(); } List<Person>
-		 * personList = new ArrayList<Person>(); for (Integer id : personIds)
-		 * personList.add(Context.getPersonService().getPerson(id));
-		 * 
-		 * return personList;
-		 * */
 
 		Session session = sessionFactory.getCurrentSession();
 
@@ -637,8 +595,9 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			if (obj[7] != null)
 				appointment.setProvider(Context.getPersonService().getPerson(
 						(Integer) obj[7]));
-
-			appointment.setService(getServiceById((Integer) obj[8]));
+			
+			if (obj[8] != null)
+				appointment.setService(getServiceById((Integer) obj[8]));
 
 			if (obj[9] != null)
 				appointment.setEncounter(Context.getEncounterService()
