@@ -249,8 +249,6 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 			appointmentIds = session.createSQLQuery(combinedSearch.toString())
 					.list();
 
-			log.info("________________>>>>> " + combinedSearch.toString());
-
 		} else {
 			// Returns all future appointment not yet attended when nothing or
 			// no conditions selected.
