@@ -208,8 +208,8 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 					appointment.setVoided(false);
 					appointment.setReason(reasonForVisit);
 					// appointment.setState(Null.enter(appointment));
-//					appointment.setAppointmentState(new AppointmentState(3,
-//							"UPCOMING"));
+					// appointment.setAppointmentState(new AppointmentState(3,
+					// "UPCOMING"));
 					appointment.setCreatedDate(new Date());
 					appointment.setCreator(Context.getAuthenticatedUser());
 
@@ -254,13 +254,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 			Encounter encounter = (Encounter) returnVal;
 
 			if (encounter.getDateCreated().equals(new Date())
-					&& encounter.getEncounterDatetime().equals(new Date())
-					&& encounter.getForm() != null
-					&& !encounter.isVoided()
-					&& encounter.getLocation().equals(
-							Context.getLocationService().getDefaultLocation())) {
-
-				log.info("");
+					&& encounter.getForm() != null && !encounter.isVoided()) {
 
 				Collection<Appointment> waitingAppointments = AppointmentUtil
 						.getAllWaitingAppointmentsByPatientAtService(encounter
@@ -271,8 +265,14 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 				if (waitingAppointments != null)
 					if (waitingAppointments.size() > 0) {
 						for (Appointment appointment : waitingAppointments)
-							AppointmentUtil
-									.saveAttendedAppointment(appointment);
+							if (encounter.getPatient().equals(
+									appointment.getPatient())
+									&& encounter.getLocation().equals(
+											appointment.getLocation())
+									&& encounter.getEncounterDatetime().equals(
+											appointment.getAppointmentDate()))
+								AppointmentUtil
+										.saveAttendedAppointment(appointment);
 					}
 			}
 		}

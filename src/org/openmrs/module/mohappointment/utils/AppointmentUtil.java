@@ -143,73 +143,17 @@ public class AppointmentUtil {
 	}
 
 	/**
-	 * Cancels an appointmen by setting it to <code>voided==true</code>
+	 * Cancels an appointment by setting it to <code>voided==true</code>
 	 * 
-	 * @param request
-	 *            the HTTP Servlet Request
-	 * @param service
-	 *            the Appointment Hibernate Service
-	 * @return true when the cancellation is successful, false otherwise
+	 * @param appointment
+	 *            the Appointment to be cancelled
 	 */
-	public static boolean cancelAppointment(HttpServletRequest request) {
+	public static void cancelAppointment(Appointment appointment) {
 
-		Integer appointmentId = 0;
+		appointment.setVoided(true);
+		appointment.setAppointmentState(new AppointmentState(1, "NULL"));
+		getAppointmentService().saveAppointment(appointment);
 
-		if (request.getParameter("appointmentId") != null)
-			if (!request.getParameter("appointmentId").equalsIgnoreCase("")) {
-
-				appointmentId = Integer.valueOf(request
-						.getParameter("appointmentId"));
-				Appointment appointment = getAppointmentService()
-						.getAppointmentById(appointmentId);
-
-				if (request.getParameter("cancel") != null)
-					if (request.getParameter("cancel").equals("true")) {
-
-						appointment.setVoided(true);
-						appointment.setAppointmentState(new AppointmentState(1,
-								"NULL"));
-						getAppointmentService().saveAppointment(appointment);
-
-						return true;
-					}
-			}
-		return false;
-	}
-
-	/**
-	 * Sets an appointment as attended (i.e. <code>attended=true</code>)
-	 * 
-	 * @param request
-	 *            the HTTP Servlet Request
-	 * @param service
-	 *            the Appointment Hibernate Service
-	 * @return true when the update is successful, false otherwise
-	 */
-	public static boolean setAttendedAppointment(HttpServletRequest request) {
-
-		Integer appointmentId = 0;
-
-		if (request.getParameter("appointmentId") != null)
-			if (!request.getParameter("appointmentId").equalsIgnoreCase("")) {
-				appointmentId = Integer.valueOf(request
-						.getParameter("appointmentId"));
-
-				Appointment appointment = getAppointmentService()
-						.getAppointmentById(appointmentId);
-
-				if (request.getParameter("attended") != null)
-					if (request.getParameter("attended").equals("true")) {
-
-						appointment.setAttended(true);
-						appointment.setAppointmentState(new AppointmentState(9,
-								"ATTENDED"));
-						getAppointmentService().saveAppointment(appointment);
-
-						return true;
-					}
-			}
-		return false;
 	}
 
 	/**
