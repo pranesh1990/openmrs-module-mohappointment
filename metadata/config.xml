@@ -6,7 +6,7 @@
 	<!-- MoH Appointment Module Properties -->
 	<id>mohappointment</id>
 	<name>Appointment Management</name>
-	<version>0.0.9</version>
+	<version>0.0.8</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>MoH-Rwanda</author>
 	<description>
@@ -50,11 +50,11 @@
 	</extension>
 	
 	<!-- AOP -->
-	<advice>
+	<!-- <advice>
 		<point>org.openmrs.api.EncounterService</point>
 		<class>@MODULE_PACKAGE@.advice.EncounterServiceAdvice</class>
 	</advice>
-	<!-- <advice>
+	<advice>
 		<point>org.openmrs.api.ObsService</point>
 		<class>@MODULE_PACKAGE@.advice.ObsServiceAdvice</class>
 	</advice> -->
