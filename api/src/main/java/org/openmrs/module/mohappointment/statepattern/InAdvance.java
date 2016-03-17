@@ -6,7 +6,7 @@ package org.openmrs.module.mohappointment.statepattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 
 /**
@@ -14,12 +14,12 @@ import org.openmrs.module.mohappointment.service.IAppointmentService;
  * 
  */
 public class InAdvance extends State {
-	private Appointment appointment;
+	private MoHAppointment appointment;
 	private Log log = LogFactory.getLog(this.getClass());
 	private static InAdvance instance;
 
 	// Constructor
-	private InAdvance(Appointment appointment) {
+	private InAdvance(MoHAppointment appointment) {
 		System.out.println("InAdvance State is instantiated...");
 		this.appointment = appointment;
 	}
@@ -45,7 +45,7 @@ public class InAdvance extends State {
 		log.info("---------------->> " + appointment.toString());
 	}
 
-	public static State enter(Appointment appointment) {
+	public static State enter(MoHAppointment appointment) {
 		if (instance == null)
 			instance = new InAdvance(appointment);
 

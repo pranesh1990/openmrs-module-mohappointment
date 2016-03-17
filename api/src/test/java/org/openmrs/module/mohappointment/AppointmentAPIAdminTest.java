@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
@@ -26,14 +26,19 @@ public class AppointmentAPIAdminTest extends BaseModuleContextSensitiveTest {
 		// This loads some patients and concepts. this is from core
 		executeDataSet("org/openmrs/include/standardTestDataset.xml");
 		// This loads some information about Appointment
-		executeDataSet("org/openmrs/module/mohappointment/include/appointment-data.xml");
+		executeDataSet("appointment-data.xml");
+	}
+	
+	@Test
+	public void testIfServiceIsInitialized() {
+		Assert.assertNotNull(Context.getService(IAppointmentService.class));
 	}
 
 	@Test
 	@Verifies(value = "should find an appointment by its id", method = "getAppointment")
 	public final void testGetAppointment() {
 		IAppointmentService bs = Context.getService(IAppointmentService.class);
-		Appointment appointment = bs.getAppointmentById(1);
+		MoHAppointment appointment = bs.getAppointmentById(1);
 
 		// Testing whether the returned appointment is not null.
 		Assert.assertNotNull(appointment);

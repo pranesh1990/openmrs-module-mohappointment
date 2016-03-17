@@ -12,7 +12,7 @@ import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.module.mohappointment.db.AppointmentDAO;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
@@ -35,19 +35,19 @@ public class AppointmentService implements IAppointmentService {
 	}
 
 	@Override
-	public void cancelAppointment(Appointment appointment) {
+	public void cancelAppointment(MoHAppointment appointment) {
 
 		appointmentDAO.cancelAppointment(appointment);
 	}
 
 	@Override
-	public Collection<Appointment> getAllAppointments() {
+	public Collection<MoHAppointment> getAllAppointments() {
 
 		return appointmentDAO.getAllAppointments();
 	}
 
 	@Override
-	public Appointment getAppointmentById(int appointmentId) {
+	public MoHAppointment getAppointmentById(int appointmentId) {
 
 		return appointmentDAO.getAppointmentById(appointmentId);
 	}
@@ -71,19 +71,19 @@ public class AppointmentService implements IAppointmentService {
 	}
 
 	@Override
-	public void saveAppointment(Appointment appointment) {
+	public void saveAppointment(MoHAppointment appointment) {
 
 		appointmentDAO.saveAppointment(appointment);
 	}
 
 	@Override
-	public void updateAppointment(Appointment appointment) {
+	public void updateAppointment(MoHAppointment appointment) {
 
 		appointmentDAO.updateAppointment(appointment);
 	}
 
 	@Override
-	public void updateState(Appointment appointment, Integer stateId) {
+	public void updateState(MoHAppointment appointment, Integer stateId) {
 
 		appointmentDAO.updateAppointment(appointment);
 	}
@@ -165,7 +165,7 @@ public class AppointmentService implements IAppointmentService {
 	 * @see org.openmrs.module.mohappointment.service.IAppointmentService#getAllWaitingAppointmentsByPatient(org.openmrs.Patient, org.openmrs.module.mohappointment.model.AppointmentState)
 	 */
 	@Override
-	public Collection<Appointment> getAllWaitingAppointmentsByPatient(
+	public Collection<MoHAppointment> getAllWaitingAppointmentsByPatient(
 			Patient patient, AppointmentState state, Date appointmentDate) throws ParseException {
 		return appointmentDAO
 				.getAllWaitingAppointmentsByPatient(patient, state, appointmentDate);

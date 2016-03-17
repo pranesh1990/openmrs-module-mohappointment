@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<!-- appointment state table -->
+	  <moh_appointment_state appointment_state_id="1" description="null" />
+	  <moh_appointment_state appointment_state_id="2" description="confirmed" />
+	  <moh_appointment_state appointment_state_id="3" description="upcoming" />
+	  <moh_appointment_state appointment_state_id="4" description="waiting" />
+	  <moh_appointment_state appointment_state_id="5" description="inadvance" />
+	  <moh_appointment_state appointment_state_id="6" description="expired" />
+	  <moh_appointment_state appointment_state_id="7" description="retired" />
+	  <moh_appointment_state appointment_state_id="8" description="postponed" />
+	  <moh_appointment_state appointment_state_id="9" description="attended" />
+	 
+	<!-- service table -->  
+	  <moh_appointment_service service_id="1" name="consultation" retired="0"  creator="1" created_date="2005-01-01 00:00:00.0"/>
+	  <moh_appointment_service service_id="2" name="Hospitalization" retired="0"  creator="1" created_date="2005-01-01 00:00:00.0"/>
+	
+	<!-- service providers table -->  
+	  <moh_appointment_service_providers service_provider_id="1" start_date="2005-05-01 00:00:00.0" voided="0"  creator="1" created_date="2005-01-01 00:00:00.0"/>
+	  <moh_appointment_service_providers service_provider_id="2" start_date="2005-12-01 00:00:00.0" voided="0"  creator="1" created_date="2005-01-01 00:00:00.0"/>
+	  <moh_appointment_service_providers service_provider_id="3" start_date="2011-01-01 00:00:00.0" voided="0"  creator="1" created_date="2005-01-01 00:00:00.0"/>
+	  <moh_appointment_service_providers service_provider_id="4" start_date="2011-05-01 00:00:00.0" voided="0"  creator="1" created_date="2005-01-01 00:00:00.0"/>
+	
+  	<!-- appointment table -->
+	  <moh_appointment appointment_id="1" patient_id="6" note="Appointment for the patient" attended="0" reason_obs_id="10" visit_date_obs_id="11"  location_id="1" appointment_date="2011-12-15 00:00:00.0" provider_id="1" encounter_id="3" appointment_state_id="3" voided="0" />
+	  <moh_appointment appointment_id="2" patient_id="7" note="Appointment for the patient" attended="0" reason_obs_id="12" visit_date_obs_id="13"  location_id="2" appointment_date="2011-12-15 00:00:00.0" provider_id="2" encounter_id="4" appointment_state_id="4" voided="0" />
+	  
+	<!-- changed appointment table -->
+	  <moh_appointment_changed_appointment changed_appoint_id="1" reason="CONSULTATION" new_date_of_appointment="2005-01-01 00:00:00" />
+	  <moh_appointment_changed_appointment changed_appoint_id="2" reason="PHARMACY" new_date_of_appointment="2005-01-01 00:00:00" />
+	  <moh_appointment_changed_appointment changed_appoint_id="3" reason="HOSPITALIZATION" new_date_of_appointment="2005-01-01 00:00:00"/> 
+</dataset>

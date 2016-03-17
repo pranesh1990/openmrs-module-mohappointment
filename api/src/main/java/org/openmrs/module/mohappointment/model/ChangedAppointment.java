@@ -12,7 +12,7 @@ import java.util.Date;
 public class ChangedAppointment {
 
 	private Integer changedAppointId;
-	private Appointment appointment;
+	private MoHAppointment appointment;
 	private String reason;
 	private Date newDateOfAppointment;
 
@@ -37,7 +37,7 @@ public class ChangedAppointment {
 	 * @return the appointment
 	 */
 
-	public Appointment getAppointment() {
+	public MoHAppointment getAppointment() {
 		return appointment;
 	}
 
@@ -46,7 +46,7 @@ public class ChangedAppointment {
 	 *            the appointment to set
 	 */
 
-	public void setAppointment(Appointment appointment) {
+	public void setAppointment(MoHAppointment appointment) {
 		this.appointment = appointment;
 	}
 

@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.Services;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
@@ -68,7 +68,7 @@ public class ObsServiceAdvice implements AfterReturningAdvice {
 		 */
 		if (method.getName().equals("saveObs")) {
 			Obs obs = (Obs) returnVal;
-			Appointment appointment = null;
+			MoHAppointment appointment = null;
 			boolean appointmentFound = false;
 			if (obs != null && obs.getObsId().intValue() != obsId) {
 
@@ -90,7 +90,7 @@ public class ObsServiceAdvice implements AfterReturningAdvice {
 
 				if (appointmentFound) {
 
-					appointment = new Appointment();
+					appointment = new MoHAppointment();
 
 					// Setting the appointment attributes
 					appointment.setPatient(Context.getPatientService()
@@ -161,7 +161,7 @@ public class ObsServiceAdvice implements AfterReturningAdvice {
 			// Setting the parameter from the ObsService.saveObs method
 
 			Obs obs = (Obs) returnVal;
-			Appointment appointment = null;
+			MoHAppointment appointment = null;
 
 			// 1. Getting the Obs associated to the Primary Care Service:
 			if (obs != null) {
@@ -175,7 +175,7 @@ public class ObsServiceAdvice implements AfterReturningAdvice {
 								+ " SERVICE ConceptID***************"
 								+ AppointmentUtil.getServiceByConcept(
 										obs.getValueCoded()).toString());
-						appointment = new Appointment();
+						appointment = new MoHAppointment();
 						Services serv = AppointmentUtil.getServiceByConcept(obs
 								.getValueCoded());
 

@@ -25,7 +25,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.Services;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
@@ -82,7 +82,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 			// method
 			encounter = (Encounter) returnVal;
 
-			Appointment appointment = null;
+			MoHAppointment appointment = null;
 
 			// 1. Getting the Obs associated to the encounter:
 
@@ -95,7 +95,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 						// Avoiding to save the Appointment many times
 						if (obs.getValueCoded() != null) {
 
-							appointment = new Appointment();
+							appointment = new MoHAppointment();
 							Services serv = AppointmentUtil
 									.getServiceByConcept(obs.getValueCoded());
 
@@ -174,7 +174,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 				// Setting the parameter from the EncounterService.saveEncounter
 				// method
 				Encounter encounter = (Encounter) args[0];
-				Appointment appointment = null;
+				MoHAppointment appointment = null;
 				boolean appointmentFound = false;
 				// 1. Getting the Obs associated to the encounter:
 				if (encounter.getObs() != null)
@@ -194,7 +194,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 
 				if (appointmentFound) {
 
-					appointment = new Appointment();
+					appointment = new MoHAppointment();
 
 					// Setting the appointment attributes
 					appointment.setPatient(encounter.getPatient());
@@ -256,7 +256,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 			if (encounter.getDateCreated().equals(new Date())
 					&& encounter.getForm() != null && !encounter.isVoided()) {
 
-				Collection<Appointment> waitingAppointments = AppointmentUtil
+				Collection<MoHAppointment> waitingAppointments = AppointmentUtil
 						.getAllWaitingAppointmentsByPatientAtService(encounter
 								.getPatient(), new AppointmentState(4,
 								"WAITING"), encounter.getEncounterDatetime(),
@@ -264,7 +264,7 @@ public class EncounterServiceAdvice implements AfterReturningAdvice {
 
 				if (waitingAppointments != null)
 					if (waitingAppointments.size() > 0) {
-						for (Appointment appointment : waitingAppointments)
+						for (MoHAppointment appointment : waitingAppointments)
 							if (encounter.getPatient().equals(
 									appointment.getPatient())
 									&& encounter.getLocation().equals(

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
@@ -38,7 +38,7 @@ public class AppointmentDashboardPortletController extends PortletController {
 			List<Integer> appointmentIds = AppointmentUtil
 					.getAppointmentService().getAppointmentIdsByMulti(
 							conditions, 100);
-			List<Appointment> appointments = new ArrayList<Appointment>();
+			List<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
 			for (Integer appointmentId : appointmentIds) {
 				appointments.add(AppointmentUtil.getAppointmentService()
 						.getAppointmentById(appointmentId));
@@ -76,7 +76,7 @@ public class AppointmentDashboardPortletController extends PortletController {
 				Integer appointmentId = Integer.valueOf(request
 						.getParameter("appointmentId"));
 
-				Appointment appointment = AppointmentUtil
+				MoHAppointment appointment = AppointmentUtil
 						.getAppointmentService().getAppointmentById(
 								appointmentId);
 
@@ -107,7 +107,7 @@ public class AppointmentDashboardPortletController extends PortletController {
 
 				Integer appointmentId = Integer.valueOf(request
 						.getParameter("appointmentId"));
-				Appointment appointment = AppointmentUtil
+				MoHAppointment appointment = AppointmentUtil
 						.getAppointmentService().getAppointmentById(
 								appointmentId);
 

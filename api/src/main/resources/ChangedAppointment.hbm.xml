@@ -17,7 +17,7 @@
 		<property name="reason" column="reason" type="text" />
 
 		<many-to-one name="appointment"
-			class="org.openmrs.module.mohappointment.model.Appointment" column="appointment_id" />
+			class="org.openmrs.module.mohappointment.model.MoHAppointment" column="appointment_id" />
 
 
 	</class>

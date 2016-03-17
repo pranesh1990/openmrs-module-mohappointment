@@ -48,7 +48,7 @@ import org.openmrs.module.mohappointment.statepattern.Waiting;
  * attributes.
  */
 @SuppressWarnings("deprecation")
-public class Appointment { // implements ISubject {
+public class MoHAppointment { // implements ISubject {
 	/** Logger for this class and subclasses */
 	protected final Log log = LogFactory.getLog(getClass());
 
@@ -78,7 +78,7 @@ public class Appointment { // implements ISubject {
 
 	private List<IObserver> observers;
 
-	public Appointment() {
+	public MoHAppointment() {
 
 		// Default values
 		// this.state = Null.enter(this);
@@ -335,7 +335,7 @@ public class Appointment { // implements ISubject {
 
 	public boolean equals(Object obj) {
 
-		Appointment appointment = (Appointment) obj;
+		MoHAppointment appointment = (MoHAppointment) obj;
 		if (appointment != null)
 			if (appointment.getAppointmentId() == this.appointmentId
 					&& appointment.hashCode() == this.hashCode()) {

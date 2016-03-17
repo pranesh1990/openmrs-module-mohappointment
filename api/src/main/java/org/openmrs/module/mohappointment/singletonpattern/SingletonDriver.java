@@ -1,6 +1,6 @@
 package org.openmrs.module.mohappointment.singletonpattern;
 
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 
 /**
  * @author Kamonyo
@@ -18,11 +18,11 @@ public class SingletonDriver {
 		System.out.println("Kamonyo");
 		AppointmentList instance = AppointmentList.getInstance();
 		System.out.println("<<<<>>>>" + (instance instanceof AppointmentList));
-		instance.addAppointment(new Appointment());
+		instance.addAppointment(new MoHAppointment());
 		System.out.println("1a. The size of the list is : " + instance.size());
 
 		AppointmentList instance1 = AppointmentList.getInstance();
-		instance1.addAppointment(new Appointment());
+		instance1.addAppointment(new MoHAppointment());
 		System.out.println("1b. The size of the list is : " + instance1.size());
 
 	}

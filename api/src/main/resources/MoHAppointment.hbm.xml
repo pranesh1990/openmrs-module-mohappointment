@@ -6,7 +6,7 @@
 <hibernate-mapping package="org.openmrs.module.mohappointment.model">
 	<!-- Appointment -->
 
-	<class name="Appointment" table="moh_appointment">
+	<class name="MoHAppointment" table="moh_appointment">
 
 		<id name="appointmentId" type="int" column="appointment_id">
 			<generator class="native" />

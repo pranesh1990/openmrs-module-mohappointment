@@ -21,7 +21,7 @@ import java.util.List;
 import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.Person;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
@@ -43,14 +43,14 @@ public interface AppointmentDAO {
 	 *            , the appointment to be matched
 	 * @return appointment matching the id
 	 */
-	public Appointment getAppointmentById(int appointmentId);
+	public MoHAppointment getAppointmentById(int appointmentId);
 
 	/**
 	 * Gets all existing appointments.
 	 * 
 	 * @return list of all existing appointments
 	 */
-	public Collection<Appointment> getAllAppointments();
+	public Collection<MoHAppointment> getAllAppointments();
 
 	/**
 	 * Saves an appointment in the database.
@@ -58,7 +58,7 @@ public interface AppointmentDAO {
 	 * @param appointment
 	 *            , the appointment to be saved
 	 */
-	public void saveAppointment(Appointment appointment);
+	public void saveAppointment(MoHAppointment appointment);
 
 	/**
 	 * Edits an existing appointment.
@@ -66,7 +66,7 @@ public interface AppointmentDAO {
 	 * @param appointment
 	 *            , the appointment to be updated
 	 */
-	public void updateAppointment(Appointment appointment);
+	public void updateAppointment(MoHAppointment appointment);
 
 	/**
 	 * Edits an existing appointment.
@@ -76,7 +76,7 @@ public interface AppointmentDAO {
 	 * @param stateId
 	 *            , the stateId to be updated
 	 */
-	public void updateState(Appointment appointment, Integer stateId);
+	public void updateState(MoHAppointment appointment, Integer stateId);
 
 	/**
 	 * Removes a given appointment from the database.
@@ -84,7 +84,7 @@ public interface AppointmentDAO {
 	 * @param appointment
 	 *            , the appointment to be cancelled
 	 */
-	public void cancelAppointment(Appointment appointment);
+	public void cancelAppointment(MoHAppointment appointment);
 
 	/**
 	 * Gets appointments IDs by entering different conditions of filtering and
@@ -240,7 +240,7 @@ public interface AppointmentDAO {
 	 * @return the Appointments list matched
 	 * @throws ParseException 
 	 */
-	public Collection<Appointment> getAllWaitingAppointmentsByPatient(
+	public Collection<MoHAppointment> getAllWaitingAppointmentsByPatient(
 			Patient patient, AppointmentState state, Date appointmentDate) throws ParseException;
 
 }

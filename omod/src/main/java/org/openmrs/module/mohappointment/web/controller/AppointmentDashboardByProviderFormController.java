@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  import org.apache.commons.logging.LogFactory;*/
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.Services;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
@@ -86,7 +86,7 @@ public class AppointmentDashboardByProviderFormController extends
 
 		List<Integer> upcomingAppointmentIds = service
 				.getAppointmentIdsByMulti(conditionsUpcomingAppointment, 100);
-		List<Appointment> upcomingAppointments = new ArrayList<Appointment>();
+		List<MoHAppointment> upcomingAppointments = new ArrayList<MoHAppointment>();
 		for (Integer appointmentId : upcomingAppointmentIds) {
 			upcomingAppointments.add(service.getAppointmentById(appointmentId));
 		}
@@ -112,7 +112,7 @@ public class AppointmentDashboardByProviderFormController extends
 		String display = "none";
 		// By default at the first display, we don't expect to filter waiting
 		// list!
-		List<Appointment> waitingAppointments = AppointmentUtil
+		List<MoHAppointment> waitingAppointments = AppointmentUtil
 				.getTodayAppointmentsForProvider(authUser, new Date(),
 						new Date(), null);
 

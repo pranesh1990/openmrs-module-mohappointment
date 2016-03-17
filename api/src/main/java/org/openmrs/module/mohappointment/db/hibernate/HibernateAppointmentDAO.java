@@ -33,7 +33,7 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.db.AppointmentDAO;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.model.ServiceProviders;
 import org.openmrs.module.mohappointment.model.Services;
@@ -73,12 +73,12 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	 */
 
 	@Override
-	public Collection<Appointment> getAllAppointments() {
+	public Collection<MoHAppointment> getAllAppointments() {
 
 		Session session = sessionFactory.getCurrentSession();
 
-		Collection<Appointment> appointments = session.createCriteria(
-				Appointment.class).list();
+		Collection<MoHAppointment> appointments = session.createCriteria(
+				MoHAppointment.class).list();
 
 		return appointments;
 	}
@@ -103,7 +103,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	 * @see org.openmrs.module.appointment.db.AppointmentDAO#saveAppointment(org.openmrs.module.appointment.IAppointment)
 	 */
 	@Override
-	public void saveAppointment(Appointment appointment) {
+	public void saveAppointment(MoHAppointment appointment) {
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(appointment);
 	}
@@ -112,13 +112,13 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	 * @see org.openmrs.module.appointment.db.AppointmentDAO#updateAppointment(org.openmrs.module.appointment.IAppointment)
 	 */
 	@Override
-	public void updateAppointment(Appointment appointment) {
+	public void updateAppointment(MoHAppointment appointment) {
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(appointment);
 	}
 
 	@Override
-	public void updateState(Appointment appointment, Integer stateId) {
+	public void updateState(MoHAppointment appointment, Integer stateId) {
 		Session session = sessionFactory.getCurrentSession();
 		session.createSQLQuery(
 				"UPDATE moh_appointment SET appointment_state_id = " + stateId
@@ -135,7 +135,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	 * (org.openmrs.module.mohappointment.service.IAppointment)
 	 */
 	@Override
-	public void cancelAppointment(Appointment appointment) {
+	public void cancelAppointment(MoHAppointment appointment) {
 
 		Session session = sessionFactory.getCurrentSession();
 		appointment.setVoided(true);
@@ -147,11 +147,11 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	 */
 
 	@Override
-	public Appointment getAppointmentById(int appointmentId) {
+	public MoHAppointment getAppointmentById(int appointmentId) {
 
 		Session session = sessionFactory.getCurrentSession();
 
-		Appointment appointment = (Appointment) session.load(Appointment.class,
+		MoHAppointment appointment = (MoHAppointment) session.load(MoHAppointment.class,
 				appointmentId);
 
 		return appointment;
@@ -265,14 +265,14 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	public void loadAllAppointments() {
 
 		Session session = sessionFactory.getCurrentSession();
-		Collection<Appointment> appointments = session
+		Collection<MoHAppointment> appointments = session
 				.createSQLQuery(
 						"select app.* from moh_appointment app where voided = false;")
-				.addEntity("app", Appointment.class).list();
+				.addEntity("app", MoHAppointment.class).list();
 
 		if (appointments != null)
 			if (appointments.size() == 0) {
-				for (Appointment appoint : appointments) {
+				for (MoHAppointment appoint : appointments) {
 
 					AppointmentList.getInstance().addAppointment(appoint);
 
@@ -539,7 +539,7 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 	 *      java.util.Date)
 	 */
 	@Override
-	public Collection<Appointment> getAllWaitingAppointmentsByPatient(
+	public Collection<MoHAppointment> getAllWaitingAppointmentsByPatient(
 			Patient patient, AppointmentState state, Date appointmentDate)
 			throws ParseException {
 
@@ -569,11 +569,11 @@ public class HibernateAppointmentDAO implements AppointmentDAO {
 		 * 10-patient_id,11-appointment_state_id,12-voided,13-voided_date
 		 * ,14-void_reason, 15-voided_by,16-creator,17-created_date
 		 */
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
 
 		for (Object[] obj : appointmentObjects) {
 
-			Appointment appointment = new Appointment();
+			MoHAppointment appointment = new MoHAppointment();
 
 			appointment.setAppointmentId((Integer) obj[0]);
 			appointment.setAppointmentDate(appointmentDate);

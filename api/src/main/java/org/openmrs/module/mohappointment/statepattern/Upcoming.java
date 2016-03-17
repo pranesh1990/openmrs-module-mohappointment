@@ -6,7 +6,7 @@ package org.openmrs.module.mohappointment.statepattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.model.AppointmentState;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 
@@ -15,12 +15,12 @@ import org.openmrs.module.mohappointment.service.IAppointmentService;
  * 
  */
 public class Upcoming extends State {
-	private Appointment appointment;
+	private MoHAppointment appointment;
 	private Log log = LogFactory.getLog(this.getClass());
 	private static Upcoming instance;
 
 	// Constructor
-	private Upcoming(Appointment appointment) {
+	private Upcoming(MoHAppointment appointment) {
 		System.out.println("Upcoming State is instantiated...");
 		this.appointment = appointment;
 	}
@@ -78,7 +78,7 @@ public class Upcoming extends State {
 		service.updateAppointment(appointment);
 	}
 
-	public Appointment waiting() {
+	public MoHAppointment waiting() {
 		// System.out.println("Moving to Waiting state...");
 		// appointment.setState(Waiting.enter(appointment));
 
@@ -114,7 +114,7 @@ public class Upcoming extends State {
 		return appointment;
 	}
 
-	public static State enter(Appointment appointment) {
+	public static State enter(MoHAppointment appointment) {
 		if (instance == null)
 			instance = new Upcoming(appointment);
 

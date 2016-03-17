@@ -5,6 +5,10 @@
 
 <hibernate-configuration>
 	<session-factory>
-		${hbmConfig}
+		<mapping resource="MoHAppointment.hbm.xml"/>
+		<mapping resource="AppointmentState.hbm.xml"/>
+		<mapping resource="ChangedAppointment.hbm.xml"/>
+		<mapping resource="ServiceProviders.hbm.xml"/>
+		<mapping resource="Services.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

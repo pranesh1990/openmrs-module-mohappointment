@@ -12,7 +12,7 @@ import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 import org.openmrs.module.mohappointment.utils.ConstantValues;
 import org.openmrs.web.dwr.PersonListItem;
@@ -47,7 +47,7 @@ public class DWRAppointmentUtil {
 				.append("<tr class='oddRow'><th>#</th><th>Identifier</th><th>Patient Names</th><th>Age</th><th>Gender</th><th></th><th>Birthdate</th><th>Appointment Date</th><th>Provider</th><th>Reason of Appointment</th><th>State</th><th></th><th></th></tr>");
 		int i = 0;
 		for (Integer appId : appointments) {
-			Appointment app = ias.getAppointmentById(appId);
+			MoHAppointment app = ias.getAppointmentById(appId);
 			Person ps = app.getPatient();
 			i++;
 			ret = new PersonListItem();

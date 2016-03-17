@@ -1,17 +1,17 @@
 package org.openmrs.module.mohappointment.statepattern;
 
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 
 public abstract class State {
 
 	public void isNull() {
 	}
 
-	public Appointment confirmed() {
+	public MoHAppointment confirmed() {
 		return null;
 	}
 
-	public Appointment upcoming() {
+	public MoHAppointment upcoming() {
 		return null;
 	}
 
@@ -30,11 +30,11 @@ public abstract class State {
 	public void inAdvance() {
 	}
 
-	public Appointment waiting() {
+	public MoHAppointment waiting() {
 		return null;
 	}
 
-	public static State enter(Appointment appointment) {
+	public static State enter(MoHAppointment appointment) {
 		return null;
 	}
 

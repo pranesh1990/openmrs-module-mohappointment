@@ -23,20 +23,20 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.mohappointment.model.Appointment;
+import org.openmrs.module.mohappointment.model.MoHAppointment;
 import org.openmrs.module.mohappointment.service.IAppointmentService;
 
 /**
  *	
  */
-public class AppointmentList extends ArrayList<Appointment> {
+public class AppointmentList extends ArrayList<MoHAppointment> {
 
 	/**
 	 * Default serialVersionUID
 	 */
 	private static final long serialVersionUID = -5773055027470828015L;
 
-	private static List<Appointment> appointmentList = new ArrayList<Appointment>();
+	private static List<MoHAppointment> appointmentList = new ArrayList<MoHAppointment>();
 
 	private static AppointmentList list = null;
 
@@ -72,9 +72,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * 
 	 * @return a collection of non attended appointments
 	 */
-	private Collection<Appointment> getAppointmentWithoutAttendance() {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+	private Collection<MoHAppointment> getAppointmentWithoutAttendance() {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getAttended() == true || app.getAttended() == false)
 				appointments.add(app);
 		}
@@ -87,9 +87,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * @param attended
 	 * @return the list of all attended or non attended appointments
 	 */
-	private Collection<Appointment> getAppointmentByAttendance(boolean attended) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+	private Collection<MoHAppointment> getAppointmentByAttendance(boolean attended) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getAttended() == attended)
 				appointments.add(app);
 		}
@@ -106,10 +106,10 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 *            the end date
 	 * @return the collection of appointment matching the period
 	 */
-	private Collection<Appointment> getAppointmentByPeriod(Date startDate,
+	private Collection<MoHAppointment> getAppointmentByPeriod(Date startDate,
 			Date endDate) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getAppointmentDate().compareTo(startDate) >= 0
 					&& app.getAppointmentDate().compareTo(endDate) <= 0)
 				appointments.add(app);
@@ -124,9 +124,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 *            the reason of appointment
 	 * @return the collection of appointment matching the reason
 	 */
-	private Collection<Appointment> getAppointmentByReason(String reason) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+	private Collection<MoHAppointment> getAppointmentByReason(String reason) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getReason().equals(reason))
 				appointments.add(app);
 		}
@@ -140,9 +140,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 *            the appointment date
 	 * @return the collection of appointment matching the date
 	 */
-	private Collection<Appointment> getAppointmentByDate(Date appointmentDate) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+	private Collection<MoHAppointment> getAppointmentByDate(Date appointmentDate) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getAppointmentDate() == appointmentDate)
 				appointments.add(app);
 		}
@@ -156,9 +156,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 *            the location of appointment
 	 * @return the collection of appointment matching the location
 	 */
-	private Collection<Appointment> getAppointmentByLocation(Location location) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+	private Collection<MoHAppointment> getAppointmentByLocation(Location location) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getLocation().getLocationId() == location.getLocationId())
 				appointments.add(app);
 		}
@@ -172,9 +172,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 *            the service
 	 * @return the collection of appointments matching the Services.
 	 */
-	private Collection<Appointment> getAppointmentByProvider(Person provider) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+	private Collection<MoHAppointment> getAppointmentByProvider(Person provider) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getProvider().getPersonId() == provider.getPersonId())
 				appointments.add(app);
 		}
@@ -188,10 +188,10 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 *            the patient
 	 * @return the collection of appointments matching the Patient.
 	 */
-	private Collection<? extends Appointment> getAppointmentByPatient(
+	private Collection<? extends MoHAppointment> getAppointmentByPatient(
 			Patient patient) {
-		Collection<Appointment> appointments = new ArrayList<Appointment>();
-		for (Appointment app : appointmentList) {
+		Collection<MoHAppointment> appointments = new ArrayList<MoHAppointment>();
+		for (MoHAppointment app : appointmentList) {
 			if (app.getPatient().getPatientId() == patient.getPatientId())
 				appointments.add(app);
 		}
@@ -206,7 +206,7 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * ()
 	 */
 
-	public Iterator<Appointment> iterator() {
+	public Iterator<MoHAppointment> iterator() {
 		return appointmentList.iterator();
 	}
 
@@ -217,7 +217,7 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * addAppointment(org.openmrs.module.mohappointment.service.Appointment)
 	 */
 
-	public boolean addAppointment(Appointment appointment) {
+	public boolean addAppointment(MoHAppointment appointment) {
 		// Uncomment when you are done with testing on SingletonDriver.java
 
 		IAppointmentService service = Context
@@ -234,7 +234,7 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * deleteAppointment(org.openmrs.module.mohappointment.service.Appointment)
 	 */
 
-	public boolean cancelAppointment(Appointment appointment) {
+	public boolean cancelAppointment(MoHAppointment appointment) {
 		IAppointmentService service = Context
 				.getService(IAppointmentService.class);
 		service.cancelAppointment(appointment);
@@ -248,14 +248,14 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * updateAppointment(org.openmrs.module.mohappointment.service.Appointment)
 	 */
 
-	public void updateAppointment(Appointment appointment) {
+	public void updateAppointment(MoHAppointment appointment) {
 
 		IAppointmentService appointService = Context
 				.getService(IAppointmentService.class);
 
 		appointService.updateAppointment(appointment);
 
-		for (Appointment app : appointmentList)
+		for (MoHAppointment app : appointmentList)
 			if (app.getAppointmentId() == appointment.getAppointmentId()) {
 
 				// Updating the matching appointment
@@ -278,7 +278,7 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * addAllAppointments(java.util.Collection)
 	 */
 
-	public boolean addAllAppointments(Collection<Appointment> appoints) {
+	public boolean addAllAppointments(Collection<MoHAppointment> appoints) {
 		return appointmentList.addAll(appoints);
 	}
 
@@ -289,9 +289,9 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * getAppointmentsByMulti(java.lang.Object[])
 	 */
 
-	public List<Appointment> getAppointmentsByMulti(Object[] conditions) {
+	public List<MoHAppointment> getAppointmentsByMulti(Object[] conditions) {
 
-		List<Appointment> result = null;
+		List<MoHAppointment> result = null;
 		StringBuilder combinedSearch = new StringBuilder("");
 
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -332,12 +332,12 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * getPatientAppointmentsByMulti(java.lang.Object[])
 	 */
 
-	public List<Appointment> getPatientAppointmentsByMulti(Object[] conditions) {
+	public List<MoHAppointment> getPatientAppointmentsByMulti(Object[] conditions) {
 
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		// !!!!!!Maybe we don't need this anymore!!!!!!
 		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		List<Appointment> result = new ArrayList<Appointment>();
+		List<MoHAppointment> result = new ArrayList<MoHAppointment>();
 
 		if (!conditions[0].equals(""))// Patient Id
 			result.addAll(this.getAppointmentByPatient(Context
@@ -398,7 +398,7 @@ public class AppointmentList extends ArrayList<Appointment> {
 	 * @see org.openmrs.module.mohappointment.service.IAppointmentList#get(int)
 	 */
 
-	public Appointment get(int index) {
+	public MoHAppointment get(int index) {
 		return appointmentList.get(index);
 	}
 

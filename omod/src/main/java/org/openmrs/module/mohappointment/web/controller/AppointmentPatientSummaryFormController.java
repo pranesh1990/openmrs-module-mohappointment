@@ -29,6 +29,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.mohappointment.model.SimplifiedObs;
 import org.openmrs.module.mohappointment.utils.AppointmentUtil;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -52,8 +53,7 @@ public class AppointmentPatientSummaryFormController extends
 		Patient pt = Context.getPatientService().getPatient(
 				Integer.valueOf(request.getParameter("patientId")));
 		mav.addObject("patient", pt);
-		mav.addObject("dOrders", Context.getOrderService()
-				.getDrugOrdersByPatient(pt));
+		mav.addObject("dOrders", Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(pt));
 
 		List<Concept> concList = new ArrayList<Concept>();
 		concList.add(Context.getConceptService().getConcept(2169));
