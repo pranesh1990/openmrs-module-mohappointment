@@ -79,7 +79,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>mohappointment.link.laboratory_link</property>
-		<defaultValue>/module/laboratorymodule/viewLabOrder.form</defaultValue>
+		<defaultValue>/module/laboratorymanagement/viewLabOrder.form</defaultValue>
 		<description>The link that redirects to the default Laboratory page</description>
 	</globalProperty>
 	<globalProperty>

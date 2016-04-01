@@ -21,11 +21,6 @@ public class AppointmentAPIAdminTest extends BaseModuleContextSensitiveTest {
 
 	@Before
 	public void setupDatabase() throws Exception {
-		initializeInMemoryDatabase();
-		authenticate();
-		// This loads some patients and concepts. this is from core
-		executeDataSet("org/openmrs/include/standardTestDataset.xml");
-		// This loads some information about Appointment
 		executeDataSet("appointment-data.xml");
 	}
 	
