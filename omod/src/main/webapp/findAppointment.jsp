@@ -5,15 +5,14 @@
 
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
 
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery-1.3.2.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery.bigframe.js" />
+<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery.bgiframe.js" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.core.js" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.dialog.js" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.draggable.js" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.resizable.js" />
 
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/ui.all.css" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/demo.css" />
+<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/demos.css" />
 
 <h2><spring:message code="@MODULE_ID@.appointment.find"/></h2>
 
@@ -35,9 +34,9 @@
 	}
 	
 	function initializeAppointment(appointmentId,ptName,provName,appDate,reason,bt){
-		$("#form_changeAppointmentState").html("");
+		jQuery("#form_changeAppointmentState").html("");
 		if(bt==1){
-			$("#form_changeAppointmentState").html("<table>"
+			jQuery("#form_changeAppointmentState").html("<table>"
 					+"<tr><td></td><td><input type='hidden' name='appointmentId' value='"+appointmentId+"'/></td></tr>"
 					+"<tr><td>Patient Name</td><td> : <b>"+ptName+"</b></td></tr>"
 					+"<tr><td>Appointment Date</td><td> : <b>"+appDate+"</b></td></tr>"
@@ -50,7 +49,7 @@
 					+"<tr><td></td><td><input type='submit' value='Save'/></td></tr>"
 				+"</table>");
 		}else{
-			$("#form_changeAppointmentState").html("<table>"
+			jQuery("#form_changeAppointmentState").html("<table>"
 					+"<tr><td><input type='hidden' name='appointmentId' value='"+appointmentId+"'/></td><td><input type='hidden' name='appointmentState' value='8'/></td></tr>"
 					+"<tr><td>Patient Name</td><td> : <b>"+ptName+"</b></td></tr>"
 					+"<tr><td>Appointment Date</td><td> : <b>"+appDate+"</b></td></tr>"
@@ -64,8 +63,8 @@
 	
 	function showDialog(appointmentId,ptName,provName,appDate,reason,bt){
 		initializeAppointment(appointmentId,ptName,provName,appDate,reason,bt);
-		$("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.appointment.state.change'/>'><p><div id='result'>"+$('#dlgCtnt').html()+"</div></p></div>");
-		$("#dialog").dialog({
+		jQuery("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.appointment.state.change'/>'><p><div id='result'>"+jQuery('#dlgCtnt').html()+"</div></p></div>");
+		jQuery("#dialog").dialog({
 			zIndex: 980,
 			bgiframe: true,
 			height: 200,
@@ -98,8 +97,8 @@
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#n_1").focus();
+	jQuery(document).ready(function(){
+		jQuery("#n_1").focus();
 	});
 </script>
 
