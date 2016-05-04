@@ -3,8 +3,6 @@
 
 <openmrs:require privilege="Manage Services and Providers" otherwise="/login.htm" redirect="/module/mohappointment/service.form"/>
 
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery-1.3.2.js" />
-
 <%@ include file="templates/serviceProviderHeader.jsp"%>
 
 <h2><spring:message code="@MODULE_ID@.appointment.service.form"/></h2>

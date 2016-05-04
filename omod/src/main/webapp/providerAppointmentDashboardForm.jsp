@@ -10,13 +10,6 @@
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/style/appointment.css" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/style/listing.css" />
 
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery-1.3.2.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery.bigframe.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.core.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.dialog.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.draggable.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.resizable.js" />
-
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/ui.all.css" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/demo.css" />
 
@@ -169,9 +162,9 @@
 	}
 	
 	function showDialog(pId){
-		$("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.general.patientsummary'/>'><p><div id='result'>"+pId+"</div></p></div>");
+		jQuery("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.general.patientsummary'/>'><p><div id='result'>"+pId+"</div></p></div>");
 		
-		$("#dialog").dialog({
+		jQuery("#dialog").dialog({
 			zIndex: 980,
 			bgiframe: true,
 			height: 400,
@@ -181,7 +174,7 @@
 
 		var url="patientSummary.form?patientId="+pId;
 		$.get(url, function(data) {
-			  $('#result').html(data);
+			  jQuery('#result').html(data);
 		});	
 		
 	}
@@ -193,7 +186,7 @@
 		}
 	}
 
-	$(document).ready(function(){
+	jQuery(document).ready(function(){
 	});
 </script>
 

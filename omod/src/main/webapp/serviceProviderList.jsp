@@ -7,8 +7,6 @@
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/style/listing.css" />
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
 
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery-1.3.2.js" />
-
 <%@ include file="templates/serviceProviderHeader.jsp"%>
 
 <h2><spring:message code="@MODULE_ID@.appointment.service.provider.management"/></h2>

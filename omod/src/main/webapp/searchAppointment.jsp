@@ -7,13 +7,6 @@
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/style/listing.css" />
 <openmrs:htmlInclude file="/scripts/calendar/calendar.js" />
 
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery-1.3.2.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/jquery.bigframe.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.core.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.dialog.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.draggable.js" />
-<openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/scripts/ui/ui.resizable.js" />
-
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/ui.all.css" />
 <openmrs:htmlInclude file="/moduleResources/@MODULE_ID@/theme/demo.css" />
 
@@ -106,8 +99,8 @@
 	}
 	
 	function showDialog(){
-		$j("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.export.data'/>'><p><div id='result'>"+$j('#dlgCtnt').html()+"</div></p></div>");
-		$j("#dialog").dialog({
+		jQuery("#divDlg").html("<div id='dialog' style='font-size: 0.9em;' title='<spring:message code='@MODULE_ID@.export.data'/>'><p><div id='result'>"+jQuery('#dlgCtnt').html()+"</div></p></div>");
+		jQuery("#dialog").dialog({
 			zIndex: 980,
 			bgiframe: true,
 			height: 220,
@@ -123,8 +116,6 @@
 		//}
 	}
 
-	$j(document).ready(function(){
-	});
 </script>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
